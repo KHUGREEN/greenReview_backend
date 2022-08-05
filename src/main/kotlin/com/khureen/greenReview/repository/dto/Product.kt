@@ -1,9 +1,10 @@
-package com.khureen.greenReview.product
+package com.khureen.greenReview.repository.dto
 
-import com.khureen.greenReview.review.Review
+import java.util.Date
 import javax.persistence.*
 
 @Entity
+@Table(indexes = [Index(name = "i_date", columnList = "registeredDate")])
 class Product(
     @Id
     @Column(name = "product_id", nullable = false)
@@ -30,5 +31,9 @@ class Product(
     var thumbnailUrl : String,
 
     @OneToMany(mappedBy = "product")
-    var reviews: MutableList<Review>
+    var reviews: MutableList<Review>,
+
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    var registeredDate : Date
 )

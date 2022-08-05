@@ -1,4 +1,4 @@
-package com.khureen.greenReview.account
+package com.khureen.greenReview.repository.dto
 
 import javax.persistence.*
 
@@ -13,5 +13,6 @@ class Account(
     var name : String,
 
     @Column(name = "profile_image")
-    var imageUrl : String
+    var imageUrl : String,
+
 )

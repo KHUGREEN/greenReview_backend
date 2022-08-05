@@ -1,4 +1,4 @@
-package com.khureen.greenReview.review
+package com.khureen.greenReview.repository.dto
 
 import javax.persistence.Column
 import javax.persistence.Embeddable

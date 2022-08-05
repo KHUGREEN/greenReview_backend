@@ -1,7 +1,5 @@
-package com.khureen.greenReview.review
+package com.khureen.greenReview.repository.dto
 
-import com.khureen.greenReview.account.Account
-import com.khureen.greenReview.product.Product
 import javax.persistence.*
 
 @Entity
