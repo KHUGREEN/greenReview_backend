@@ -1,7 +1,6 @@
 package com.khureen.greenReview
 
-import com.khureen.greenReview.repository.ProductRepositoryCustomImpl
-import com.khureen.greenReview.service.ProductServiceImpl
+import com.khureen.greenReview.service.GetProductServiceImpl
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -15,5 +14,5 @@ class SpringConfiguration (@PersistenceContext val entityManager: EntityManager)
     fun jpqQueryFactory() = JPAQueryFactory(entityManager)
 
     @Bean
-    fun productService() = ProductServiceImpl()
+    fun productService() = GetProductServiceImpl()
 }

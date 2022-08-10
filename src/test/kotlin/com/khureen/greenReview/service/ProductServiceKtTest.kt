@@ -26,13 +26,13 @@ internal class ProductServiceKtTest {
         val result = product.toDTO()
 
         // then
-        assertEquals(product.id, result.id)
-        assertEquals(product.registeredDate, result.registeredDate)
-        assertEquals(product.originalUrl.map { it }.toList(), result.originalUrl.map { it }.toList())
-        assertEquals(product.price, result.price)
-        assertEquals(product.deliveryFee, result.deliveryFee)
-        assertEquals(product.vendor, result.vendor)
-        assertEquals(product.name, result.name)
+        assertEquals(product.id, result.id.id)
+        assertEquals(product.registeredDate, result.product.registeredDate)
+        assertEquals(product.picUrl.map { it }.toList(), result.product.picUrl.map { it }.toList())
+        assertEquals(product.price, result.product.price)
+        assertEquals(product.deliveryFee, result.product.deliveryFee)
+        assertEquals(product.vendor, result.product.vendor)
+        assertEquals(product.name, result.product.name)
     }
 
     @Test

@@ -25,7 +25,7 @@ class Product(
 
     @ElementCollection
     @Column(nullable = false)
-    var originalUrl : MutableList<String>,
+    var picUrl : MutableList<String>,
 
     @Column(nullable = false)
     var thumbnailUrl : String,

@@ -1,12 +1,8 @@
 package com.khureen.greenReview.model
 
-import com.khureen.greenReview.repository.dto.Review
 import java.util.*
-import javax.persistence.*
 
 data class ProductDTO constructor(
-    val id: Long,
-
     val name: String,
 
     val vendor: String,
@@ -15,7 +11,22 @@ data class ProductDTO constructor(
 
     val deliveryFee: Int,
 
-    val originalUrl: List<String>,
+    val picUrl: List<String>,
 
-    val registeredDate: Date
+    val registeredDate: Date,
+
+    val thumbnailUrl : String
+)
+
+data class AddProductDTO constructor(
+    val product: ProductDTO
+)
+
+data class GetProductDTO constructor(
+    val id: ProductId,
+    val product: ProductDTO
+)
+
+data class ProductId constructor(
+    val id: Long
 )

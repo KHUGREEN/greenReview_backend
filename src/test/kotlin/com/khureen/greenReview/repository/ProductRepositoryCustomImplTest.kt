@@ -12,17 +12,17 @@ import org.springframework.transaction.annotation.Transactional
 @SpringBootTest
 internal class ProductRepositoryCustomImplTest {
     @Autowired
-    lateinit var productRepositoryCustom : ProductRepositoryCustom
+    lateinit var productRepository : ProductRepository
 
     @Test
     @Transactional // Roll-back after test
     fun getProductListTest() {
         // given
         val product = TestUtil.getProduct()
-        productRepositoryCustom.addProduct(product)
+        productRepository.save(product)
 
         // when
-        val result = productRepositoryCustom.findProductWith(product.name, PageRequest.of(0, 10)).first()
+        val result = productRepository.findProductWith(product.name, PageRequest.of(0, 10)).first()
 
         // then
         assertEquals(product.id, result.id)
@@ -37,10 +37,10 @@ internal class ProductRepositoryCustomImplTest {
     fun getProductTest() {
         // given
         val product = TestUtil.getProduct()
-        productRepositoryCustom.addProduct(product)
+        productRepository.save(product)
 
         // when
-        val result = productRepositoryCustom.getProduct(product.id!!)
+        val result = productRepository.findById(product.id!!).get()
 
         // then
         assertEquals(product.id, result.id)
@@ -49,7 +49,7 @@ internal class ProductRepositoryCustomImplTest {
         assertEquals(product.price, result.price)
         assertEquals(product.thumbnailUrl, result.thumbnailUrl)
         assertEquals(product.deliveryFee, result.deliveryFee)
-        assertEquals(product.originalUrl, result.originalUrl)
+        assertEquals(product.picUrl, result.picUrl)
         assertEquals(product.registeredDate, result.registeredDate)
         assertEquals(product.reviews, result.reviews)
     }

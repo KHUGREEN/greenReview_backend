@@ -5,6 +5,7 @@ import com.khureen.greenReview.repository.dto.ProductListElement
 import com.khureen.greenReview.repository.dto.QProduct
 import com.querydsl.core.types.Projections
 import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
@@ -12,10 +13,12 @@ import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
+interface ProductRepository : JpaRepository<Product, Long>, ProductRepositoryCustom {
+
+}
+
 interface ProductRepositoryCustom {
     fun findProductWith(name : String, page: Pageable) : List<ProductListElement>
-    fun getProduct(id : Long) : Product
-    fun addProduct(product: Product)
 }
 
 @Repository
@@ -23,7 +26,6 @@ interface ProductRepositoryCustom {
 @Component
 @PersistenceContext
 class ProductRepositoryCustomImpl : ProductRepositoryCustom, QuerydslRepositorySupport(Product::class.java) {
-
     override fun findProductWith(name: String, page: Pageable) : List<ProductListElement> {
         val qProduct = QProduct.product
 
@@ -43,19 +45,5 @@ class ProductRepositoryCustomImpl : ProductRepositoryCustom, QuerydslRepositoryS
             .fetch()
 
         return result
-    }
-
-    override fun getProduct(id : Long) : Product {
-        val qProduct = QProduct.product
-
-        val result = from(qProduct)
-            .where(qProduct.id.eq(id))
-            .fetchFirst()
-
-        return result
-    }
-
-    override fun addProduct(product: Product) {
-        entityManager!!.persist(product)
     }
 }

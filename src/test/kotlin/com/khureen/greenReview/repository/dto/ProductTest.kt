@@ -4,6 +4,7 @@ import com.khureen.greenReview.TestUtil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import java.util.*
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
@@ -38,7 +39,8 @@ class ProductTest {
             product =  product,
             content = "abc",
             rate = 0.0,
-            checklist = Checklist(false, false, false, false, false, false, false)
+            checklist = Checklist(false, false, false, false, false, false, false),
+            registeredDate = Date()
         )
 
         product.reviews.add(review)

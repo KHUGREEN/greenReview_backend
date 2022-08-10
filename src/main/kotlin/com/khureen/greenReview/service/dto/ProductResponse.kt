@@ -1,5 +1,5 @@
 package com.khureen.greenReview.service.dto
 
-import com.khureen.greenReview.model.ProductDTO
+import com.khureen.greenReview.model.GetProductDTO
 
-data class ProductResponse constructor(val product : ProductDTO)
+data class ProductResponse constructor(val product : GetProductDTO)

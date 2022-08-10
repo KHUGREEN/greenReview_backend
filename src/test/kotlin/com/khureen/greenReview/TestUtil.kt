@@ -14,7 +14,7 @@ class TestUtil {
                 vendor = "vendor",
                 price = 0,
                 deliveryFee = 0,
-                originalUrl = mutableListOf("list"),
+                picUrl = mutableListOf("list"),
                 thumbnailUrl = "thumbnail",
                 reviews = mutableListOf(),
                 registeredDate = Date()
@@ -33,7 +33,7 @@ class TestUtil {
                 vendor = "vendor",
                 price = 0,
                 deliveryFee = 0,
-                originalUrl = mutableListOf("list"),
+                picUrl = mutableListOf("list"),
                 thumbnailUrl = "thumbnail",
                 reviews = mutableListOf(),
                 registeredDate = Date()
@@ -58,7 +58,8 @@ class TestUtil {
                         false,
                         false,
                         false
-                    )
+                    ),
+                    registeredDate = Date()
                 )
             )
 
