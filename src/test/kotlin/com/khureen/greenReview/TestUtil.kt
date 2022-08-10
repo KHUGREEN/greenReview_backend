@@ -17,7 +17,8 @@ class TestUtil {
                 picUrl = mutableListOf("list"),
                 thumbnailUrl = "thumbnail",
                 reviews = mutableListOf(),
-                registeredDate = Date()
+                registeredDate = Date(),
+                originalUrl = "originalUrl"
             )
 
             return product
@@ -25,6 +26,18 @@ class TestUtil {
 
         fun getAccount(): Account {
             return Account(name = "abc", imageUrl = "unused")
+        }
+
+        fun getChecklist() : Checklist {
+            return Checklist(
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false
+            )
         }
 
         fun getReview(): Review {
@@ -36,7 +49,8 @@ class TestUtil {
                 picUrl = mutableListOf("list"),
                 thumbnailUrl = "thumbnail",
                 reviews = mutableListOf(),
-                registeredDate = Date()
+                registeredDate = Date(),
+                originalUrl = "originalUrl"
             )
 
             val account = Account(
@@ -50,15 +64,7 @@ class TestUtil {
                     product = product,
                     content = "content",
                     rate = 0.0,
-                    checklist = Checklist(
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false,
-                        false
-                    ),
+                    checklist = getChecklist(),
                     registeredDate = Date()
                 )
             )

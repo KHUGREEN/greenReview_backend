@@ -2,6 +2,7 @@ package com.khureen.greenReview.service
 
 import com.khureen.greenReview.model.*
 import com.khureen.greenReview.repository.ProductRepository
+import com.khureen.greenReview.repository.ReviewRepository
 import com.khureen.greenReview.repository.dto.Product
 import com.khureen.greenReview.repository.dto.ProductListElement
 import com.khureen.greenReview.service.dto.ProductListResponse
@@ -14,7 +15,7 @@ fun ProductListElement.toDTO(): ProductListElementDTO {
     return ProductListElementDTO(this.id, this.thumbnailUrl, this.name, this.vendor, this.price)
 }
 
-fun Product.toDTO(): GetProductDTO {
+fun Product.toGetDTOWith(score: Double): GetProductDTO {
     return GetProductDTO(
         ProductId(this.id!!),
         ProductDTO(
@@ -24,8 +25,10 @@ fun Product.toDTO(): GetProductDTO {
             deliveryFee = this.deliveryFee,
             picUrl = this.picUrl.map { it }.toList(),
             registeredDate = this.registeredDate,
-            thumbnailUrl = this.thumbnailUrl
-        )
+            thumbnailUrl = this.thumbnailUrl,
+            originalUrl = this.originalUrl
+        ),
+        ProductScore(score)
     )
 }
 
@@ -43,7 +46,8 @@ class AddProductService {
             price = product.product.price,
             deliveryFee = product.product.deliveryFee,
             registeredDate = product.product.registeredDate,
-            reviews = mutableListOf()
+            reviews = mutableListOf(),
+            originalUrl = product.product.originalUrl
         ))
     }
 }
@@ -53,9 +57,13 @@ class GetProductServiceImpl {
     @Autowired
     lateinit var productRepo: ProductRepository
 
+    @Autowired
+    lateinit var reviewRepo: ReviewRepository
+
     fun getProductById(id: Long): ProductResponse {
         val dto = productRepo.findById(id).get()
-        return ProductResponse(dto.toDTO())
+        val score = reviewRepo.getAverageByProduct(id)
+        return ProductResponse(dto.toGetDTOWith(score))
     }
 }
 

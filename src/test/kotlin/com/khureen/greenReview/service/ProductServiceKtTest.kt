@@ -23,7 +23,7 @@ internal class ProductServiceKtTest {
         entityManager.persist(product) // to get id
 
         // when
-        val result = product.toDTO()
+        val result = product.toGetDTOWith(0.0)
 
         // then
         assertEquals(product.id, result.id.id)

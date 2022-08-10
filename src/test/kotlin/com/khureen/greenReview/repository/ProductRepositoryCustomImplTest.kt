@@ -43,14 +43,6 @@ internal class ProductRepositoryCustomImplTest {
         val result = productRepository.findById(product.id!!).get()
 
         // then
-        assertEquals(product.id, result.id)
-        assertEquals(product.name, result.name)
-        assertEquals(product.vendor, result.vendor)
-        assertEquals(product.price, result.price)
-        assertEquals(product.thumbnailUrl, result.thumbnailUrl)
-        assertEquals(product.deliveryFee, result.deliveryFee)
-        assertEquals(product.picUrl, result.picUrl)
-        assertEquals(product.registeredDate, result.registeredDate)
-        assertEquals(product.reviews, result.reviews)
+        assertEquals(product, result)
     }
 }

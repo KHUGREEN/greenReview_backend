@@ -35,5 +35,8 @@ class Product(
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    var registeredDate : Date
+    var registeredDate : Date,
+
+    @Column(nullable = false)
+    var originalUrl : String
 )

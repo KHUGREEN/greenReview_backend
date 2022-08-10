@@ -3,6 +3,7 @@ package com.khureen.greenReview.service
 import com.khureen.greenReview.model.AddReviewDTO
 import com.khureen.greenReview.model.ChecklistDTO
 import com.khureen.greenReview.model.ProductId
+import com.khureen.greenReview.model.ReviewId
 import com.khureen.greenReview.repository.AccountRepository
 import com.khureen.greenReview.repository.ProductRepository
 import com.khureen.greenReview.repository.ReviewRepository
@@ -52,7 +53,7 @@ class AddReviewService {
     lateinit var productRepository: ProductRepository
 
 
-    fun addReview(review: AddReviewDTO) {
+    fun addReview(review: AddReviewDTO) : ReviewId {
         val account = accountRepository.findById(review.account.id).get()
         val product = productRepository.findById(review.product.id).get()
 
@@ -67,5 +68,7 @@ class AddReviewService {
 
         reviewRepository.save(reviewEntity)
         product.reviews.add(reviewEntity)
+
+        return ReviewId(reviewEntity.id!!)
     }
 }

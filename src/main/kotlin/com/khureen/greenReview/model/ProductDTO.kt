@@ -15,7 +15,9 @@ data class ProductDTO constructor(
 
     val registeredDate: Date,
 
-    val thumbnailUrl : String
+    val thumbnailUrl : String,
+
+    val originalUrl : String
 )
 
 data class AddProductDTO constructor(
@@ -24,9 +26,14 @@ data class AddProductDTO constructor(
 
 data class GetProductDTO constructor(
     val id: ProductId,
-    val product: ProductDTO
+    val product: ProductDTO,
+    val score: ProductScore
 )
 
 data class ProductId constructor(
     val id: Long
+)
+
+data class ProductScore constructor(
+    val score: Double
 )

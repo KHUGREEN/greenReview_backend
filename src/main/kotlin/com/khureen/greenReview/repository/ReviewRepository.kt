@@ -19,6 +19,8 @@ interface ReviewRepository : JpaRepository<Review, Long>, ReviewRepositoryCustom
 
 interface ReviewRepositoryCustom {
     fun findByProductId(productId: Long, page: Pageable) : List<Review>
+
+    fun getAverageByProduct(productId: Long) : Double
 }
 
 @Repository
@@ -35,6 +37,17 @@ class ReviewRepositoryCustomImpl : ReviewRepositoryCustom, QuerydslRepositorySup
             .offset(page.offset)
             .limit(page.pageSize.toLong())
             .fetch()
+
+        return result
+    }
+
+    override fun getAverageByProduct(productId: Long): Double {
+        val qReview = QReview.review
+
+        val result = from(qReview)
+            .where(qReview.product.id.eq(productId))
+            .select(qReview.rate.avg())
+            .fetchOne()
 
         return result
     }
