@@ -32,10 +32,9 @@ class ProductTest {
     fun ctor_AddReviewTest() {
         // given
         val product = TestUtil.getProduct()
-        val account = TestUtil.getAccount()
 
         val review = Review(
-            author = account,
+            author = "account",
             product =  product,
             content = "abc",
             rate = 0.0,
@@ -47,13 +46,11 @@ class ProductTest {
 
         // when
         em.persist(product)
-        em.persist(account)
         em.persist(review)
         em.flush()
 
         // then
-        assertEquals(em.find(Review::class.java, review.id).author.name, account.name)
-        assertEquals(em.find(Review::class.java, review.id).author.imageUrl, account.imageUrl)
+        assertEquals(em.find(Review::class.java, review.id).author, "account")
         assertEquals(em.find(Review::class.java, review.id).rate, 0.0)
         assertEquals(em.find(Review::class.java, review.id).content, review.content)
     }

@@ -52,27 +52,35 @@ class AddProductService {
     }
 }
 
+interface GetProductService {
+    fun getProductById(id: Long): ProductResponse
+}
+
 @Service
-class GetProductServiceImpl {
+class GetProductServiceImpl : GetProductService{
     @Autowired
     lateinit var productRepo: ProductRepository
 
     @Autowired
     lateinit var reviewRepo: ReviewRepository
 
-    fun getProductById(id: Long): ProductResponse {
+    override fun getProductById(id: Long): ProductResponse {
         val dto = productRepo.findById(id).get()
         val score = reviewRepo.getAverageByProduct(id)
         return ProductResponse(dto.toGetDTOWith(score))
     }
 }
 
+interface GetProductListService {
+    fun getProductList(searchTerm: String, page: Pageable): ProductListResponse
+}
+
 @Service
-class GetProductListServiceImpl {
+class GetProductListServiceImpl : GetProductListService {
     @Autowired
     lateinit var productRepo: ProductRepository
 
-    fun getProductList(name: String, page: Pageable): ProductListResponse {
-        return ProductListResponse(productRepo.findProductWith(name, page).map { it.toDTO() })
+    override fun getProductList(searchTerm: String, page: Pageable): ProductListResponse {
+        return ProductListResponse(productRepo.findProductWith(searchTerm, page).map { it.toDTO() })
     }
 }

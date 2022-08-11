@@ -20,7 +20,6 @@ class ReviewTest {
 
         // when
         em.persist(review.product)
-        em.persist(review.author)
         em.persist(review)
         em.flush()
 

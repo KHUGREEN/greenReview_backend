@@ -1,6 +1,5 @@
 package com.khureen.greenReview
 
-import com.khureen.greenReview.repository.dto.Account
 import com.khureen.greenReview.repository.dto.Checklist
 import com.khureen.greenReview.repository.dto.Product
 import com.khureen.greenReview.repository.dto.Review
@@ -22,10 +21,6 @@ class TestUtil {
             )
 
             return product
-        }
-
-        fun getAccount(): Account {
-            return Account(name = "abc", imageUrl = "unused")
         }
 
         fun getChecklist() : Checklist {
@@ -53,14 +48,9 @@ class TestUtil {
                 originalUrl = "originalUrl"
             )
 
-            val account = Account(
-                name = "name",
-                imageUrl = "url"
-            )
-
             product.reviews.add(
                 Review(
-                    author = account,
+                    author = "account",
                     product = product,
                     content = "content",
                     rate = 0.0,

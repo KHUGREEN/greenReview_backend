@@ -28,7 +28,6 @@ internal class ReviewRepositoryCustomImplTest {
         //given
         val review = TestUtil.getReview()
         entityManager.persist(review.product)
-        entityManager.persist(review.author)
         entityManager.persist(review)
 
         //when
@@ -44,10 +43,9 @@ internal class ReviewRepositoryCustomImplTest {
 
         //given
         val product = TestUtil.getProduct()
-        val account = TestUtil.getAccount()
 
         val zeroScoredReview = Review(
-            author = account,
+            author = "account",
             product = product,
             content = "",
             registeredDate = Date(),
@@ -56,7 +54,7 @@ internal class ReviewRepositoryCustomImplTest {
         )
 
         val oneScoredReview = Review(
-            author = account,
+            author = "account",
             product = product,
             content = "",
             registeredDate = Date(),
@@ -65,7 +63,6 @@ internal class ReviewRepositoryCustomImplTest {
         )
 
         entityManager.persist(product)
-        entityManager.persist(account)
 
         reviewRepository.save(zeroScoredReview)
         reviewRepository.save(oneScoredReview)
