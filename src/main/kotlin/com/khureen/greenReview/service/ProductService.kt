@@ -3,6 +3,7 @@ package com.khureen.greenReview.service
 import com.khureen.greenReview.model.*
 import com.khureen.greenReview.repository.ProductRepository
 import com.khureen.greenReview.repository.ReviewRepository
+import com.khureen.greenReview.repository.dto.Checklist
 import com.khureen.greenReview.repository.dto.Product
 import com.khureen.greenReview.repository.dto.ProductListElement
 import com.khureen.greenReview.service.dto.ProductListResponse

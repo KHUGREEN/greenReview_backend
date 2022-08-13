@@ -14,23 +14,23 @@ class Checklist(
     */
 
     @Column
-    var hidingSideEffects : Double,
+    var hidingSideEffects : Int,
 
     @Column
-    var notSufficientEvidence : Double,
+    var notSufficientEvidence : Int,
 
     @Column
-    var ambiguousStatement: Double,
+    var ambiguousStatement: Int,
 
     @Column
-    var notRelatedStatement : Double,
+    var notRelatedStatement : Int,
 
     @Column
-    var lieStatement : Double,
+    var lieStatement : Int,
 
     @Column
-    var justifyingHarmingProduct : Double,
+    var justifyingHarmingProduct : Int,
 
     @Column
-    var inappropriateCertification : Double
+    var inappropriateCertification : Int
 )

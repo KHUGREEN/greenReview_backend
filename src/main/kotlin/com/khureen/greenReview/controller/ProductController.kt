@@ -1,5 +1,7 @@
 package com.khureen.greenReview.controller
 
+import com.khureen.greenReview.model.ChecklistDTO
+import com.khureen.greenReview.model.ChecklistStatisticsDTO
 import com.khureen.greenReview.service.GetProductListService
 import com.khureen.greenReview.service.GetProductService
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import java.util.*
 
 @Controller
 @RequestMapping("product")
@@ -32,9 +35,9 @@ class ProductController {
             price = result.product.product.price,
             deliveryFee = result.product.product.deliveryFee,
             originalURL = result.product.product.originalUrl,
-            rate = 0.0,
-            reviewer = 0,
-            checkList = listOf()
+            rate = result.product.score.map { it.score },
+            reviewer = result.product.score.map { it.reviewer },
+            checkList = result.product.score.map { getChecklistResponse(it.checklist) }
         )
     }
 
@@ -54,12 +57,25 @@ class ProductController {
                 name = it.name,
                 vendor = it.vendor,
                 price = it.price,
-                reviewer = 0,
-                checkList = listOf()
+                reviewer = it.score.map { it.reviewer },
+                checkList = it.score.map { getChecklistResponse(it.checklist) },
+                rate = it.score.map { it.score }
             )
         }
 
         return result
+    }
+
+    fun getChecklistResponse(checklist: ChecklistStatisticsDTO): List<ChecklistStatistics> {
+        return listOf(
+            ChecklistStatistics(1, "hidingSideEffects", checklist.hidingSideEffects),
+            ChecklistStatistics(2, "notSufficientEvidence", checklist.notSufficientEvidence),
+            ChecklistStatistics(3, "ambiguousStatement", checklist.ambiguousStatement),
+            ChecklistStatistics(4, "notRelatedStatement", checklist.notRelatedStatement),
+            ChecklistStatistics(5, "lieStatement", checklist.lieStatement),
+            ChecklistStatistics(6, "justifyingHarmingProduct", checklist.justifyingHarmingProduct),
+            ChecklistStatistics(7, "inappropriateCertification", checklist.inappropriateCertification)
+        )
     }
 }
 
@@ -74,9 +90,9 @@ data class GetProductDetailResponse constructor(
     val price : Int,
     val deliveryFee : Int,
     val originalURL : String,
-    val rate : Double,
-    val reviewer: Int,
-    val checkList: List<ChecklistStatistics>
+    val rate : Optional<Double>,
+    val reviewer: Optional<Long>,
+    val checkList: Optional<List<ChecklistStatistics>>
 )
 
 data class GetProductListResponseElement constructor(
@@ -85,8 +101,9 @@ data class GetProductListResponseElement constructor(
     val name : String,
     val vendor : String,
     val price : Int,
-    val reviewer : Int,
-    val checkList : List<ChecklistStatistics>
+    val rate : Optional<Double>,
+    val reviewer : Optional<Long>,
+    val checkList : Optional<List<ChecklistStatistics>>
 )
 
 data class ChecklistStatistics constructor(

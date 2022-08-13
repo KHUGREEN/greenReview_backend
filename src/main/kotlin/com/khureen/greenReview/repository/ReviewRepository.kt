@@ -1,5 +1,6 @@
 package com.khureen.greenReview.repository
 
+import com.khureen.greenReview.model.ChecklistStatisticsDTO
 import com.khureen.greenReview.repository.dto.Checklist
 import com.khureen.greenReview.repository.dto.QReview
 import com.khureen.greenReview.repository.dto.Review
@@ -21,7 +22,7 @@ interface ReviewRepository : JpaRepository<Review, Long>, ReviewRepositoryCustom
 interface ReviewRepositoryCustom {
     fun findByProductId(productId: Long, page: Pageable): List<Review>
 
-    fun getAverageChecklistBy(productId: Long): Optional<Checklist>
+    fun getAverageChecklistBy(productId: Long): Optional<ChecklistStatisticsDTO>
 
     fun getReviewStatisticsBy(productId: Long) : Optional<ReviewStatistics>
 }
@@ -44,21 +45,21 @@ class ReviewRepositoryCustomImpl : ReviewRepositoryCustom, QuerydslRepositorySup
         return result
     }
 
-    override fun getAverageChecklistBy(productId: Long): Optional<Checklist> {
+    override fun getAverageChecklistBy(productId: Long): Optional<ChecklistStatisticsDTO> {
         val qReview = QReview.review
 
         val avgChecklist = from(qReview)
             .where(qReview.product.id.eq(productId))
             .select(
                 Projections.constructor(
-                    Checklist::class.java,
-                    qReview.checklist.hidingSideEffects.avg(),
-                    qReview.checklist.notSufficientEvidence.avg(),
-                    qReview.checklist.ambiguousStatement.avg(),
-                    qReview.checklist.notRelatedStatement.avg(),
-                    qReview.checklist.lieStatement.avg(),
-                    qReview.checklist.justifyingHarmingProduct.avg(),
-                    qReview.checklist.inappropriateCertification.avg()
+                    ChecklistStatisticsDTO::class.java,
+                    qReview.checklist.hidingSideEffects.sum(),
+                    qReview.checklist.notSufficientEvidence.sum(),
+                    qReview.checklist.ambiguousStatement.sum(),
+                    qReview.checklist.notRelatedStatement.sum(),
+                    qReview.checklist.lieStatement.sum(),
+                    qReview.checklist.justifyingHarmingProduct.sum(),
+                    qReview.checklist.inappropriateCertification.sum()
                 )
             )
             .fetchOne()
