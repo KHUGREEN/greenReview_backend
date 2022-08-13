@@ -45,3 +45,25 @@ data class ChecklistDTO constructor(
 
     val inappropriateCertification : Boolean
 )
+
+data class ReviewStatisticsDTO constructor(
+    val reviewer : Int,
+    val score: Double,
+    val checklistStatisticsDTO: ChecklistStatisticsDTO
+)
+
+data class ChecklistStatisticsDTO constructor(
+    val hidingSideEffects : Double,
+
+    val notSufficientEvidence : Double,
+
+    val ambiguousStatement: Double,
+
+    val notRelatedStatement : Double,
+
+    val lieStatement : Double,
+
+    val justifyingHarmingProduct : Double,
+
+    val inappropriateCertification : Double
+)

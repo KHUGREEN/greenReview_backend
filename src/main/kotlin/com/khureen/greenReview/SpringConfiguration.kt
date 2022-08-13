@@ -12,7 +12,4 @@ import javax.persistence.PersistenceContext
 class SpringConfiguration (@PersistenceContext val entityManager: EntityManager) {
     @Bean
     fun jpqQueryFactory() = JPAQueryFactory(entityManager)
-
-    @Bean
-    fun productService() = GetProductServiceImpl()
 }

@@ -32,28 +32,12 @@ class ProductController {
             price = result.product.product.price,
             deliveryFee = result.product.product.deliveryFee,
             originalURL = result.product.product.originalUrl,
-            rate = result.product.score.score,
-            reviewer = result.product.score.reviewer,
-            checkList = result.product.product.checklist
+            rate = 0.0,
+            reviewer = 0,
+            checkList = listOf()
         )
     }
 
-    /*
-    *
-    * { [
-        id: 1,
-        pic_url: '.../...png',
-        name: '레모나',
-        vendor: '일동제약',
-        price: 3000,
-        deliveryFee: 0,
-        originalURL: 'https://...',
-        rate : 3.5
-        reviewer: 30,
-        checklists: [{id: 1, name: '증거', num: 2}, ...]
-    *
-    *
-    * */
     @GetMapping("/list")
     fun getProductList(
         @RequestParam(value = "q", required = true) query: String,
@@ -70,8 +54,8 @@ class ProductController {
                 name = it.name,
                 vendor = it.vendor,
                 price = it.price,
-                reviewer = it.reviewer,
-                checkList = it.checklist
+                reviewer = 0,
+                checkList = listOf()
             )
         }
 
@@ -92,7 +76,7 @@ data class GetProductDetailResponse constructor(
     val originalURL : String,
     val rate : Double,
     val reviewer: Int,
-    val checkList: List<ChecklistElement>
+    val checkList: List<ChecklistStatistics>
 )
 
 data class GetProductListResponseElement constructor(
@@ -102,5 +86,11 @@ data class GetProductListResponseElement constructor(
     val vendor : String,
     val price : Int,
     val reviewer : Int,
-    val checkList : List<ChecklistElement>
+    val checkList : List<ChecklistStatistics>
+)
+
+data class ChecklistStatistics constructor(
+    val id: Int, // 1 ~ 7
+    val name: String, // id와 같은 의미의 값
+    val num : Int // 선택한 사람의 수
 )

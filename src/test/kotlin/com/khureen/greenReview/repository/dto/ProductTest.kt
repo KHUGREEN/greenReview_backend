@@ -38,7 +38,15 @@ class ProductTest {
             product =  product,
             content = "abc",
             rate = 0.0,
-            checklist = Checklist(false, false, false, false, false, false, false),
+            checklist = Checklist(
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ),
             registeredDate = Date()
         )
 

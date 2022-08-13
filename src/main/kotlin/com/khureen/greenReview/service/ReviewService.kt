@@ -24,25 +24,25 @@ fun Review.toDto(): GetReviewDTO {
 
 fun Checklist.toDto(): ChecklistDTO {
     return ChecklistDTO(
-        hidingSideEffects = hidingSideEffects,
-        notSufficientEvidence = notSufficientEvidence,
-        ambiguousStatement = ambiguousStatement,
-        notRelatedStatement = notRelatedStatement,
-        lieStatement = lieStatement,
-        justifyingHarmingProduct = justifyingHarmingProduct,
-        inappropriateCertification = inappropriateCertification
+        hidingSideEffects = hidingSideEffects == 1.0,
+        notSufficientEvidence = notSufficientEvidence == 1.0,
+        ambiguousStatement = ambiguousStatement == 1.0,
+        notRelatedStatement = notRelatedStatement == 1.0,
+        lieStatement = lieStatement == 1.0,
+        justifyingHarmingProduct = justifyingHarmingProduct == 1.0,
+        inappropriateCertification = inappropriateCertification == 1.0
     )
 }
 
 fun ChecklistDTO.toEntity(): Checklist {
     return Checklist(
-        hidingSideEffects = hidingSideEffects,
-        notSufficientEvidence = notSufficientEvidence,
-        ambiguousStatement = ambiguousStatement,
-        notRelatedStatement = notRelatedStatement,
-        lieStatement = lieStatement,
-        justifyingHarmingProduct = justifyingHarmingProduct,
-        inappropriateCertification = inappropriateCertification
+        hidingSideEffects = if(hidingSideEffects) 1.0 else 0.0,
+        notSufficientEvidence = if(notSufficientEvidence) 1.0 else 0.0,
+        ambiguousStatement = if(ambiguousStatement) 1.0 else 0.0,
+        notRelatedStatement = if(notRelatedStatement) 1.0 else 0.0,
+        lieStatement = if(lieStatement) 1.0 else 0.0,
+        justifyingHarmingProduct = if(justifyingHarmingProduct) 1.0 else 0.0,
+        inappropriateCertification = if(inappropriateCertification) 1.0 else 0.0
     )
 }
 

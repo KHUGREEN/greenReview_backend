@@ -4,7 +4,7 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-@Table(indexes = [Index(name = "i_date", columnList = "registeredDate")])
+@Table(indexes = [Index(name = "i_date", columnList = "registeredDate"), Index(name  = "i_product_id", columnList = "product_id")])
 class Review(
     @Id
     @Column(name = "review_id", nullable = false)

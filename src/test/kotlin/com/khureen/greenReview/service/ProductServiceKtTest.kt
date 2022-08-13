@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
@@ -23,7 +24,7 @@ internal class ProductServiceKtTest {
         entityManager.persist(product) // to get id
 
         // when
-        val result = product.toGetDTOWith(0.0)
+        val result = product.toGetDTOWith(Optional.empty())
 
         // then
         assertEquals(product.id, result.id.id)
@@ -47,7 +48,7 @@ internal class ProductServiceKtTest {
             ProductListElement(product.id!!, product.thumbnailUrl, product.name, product.vendor, product.price)
 
         // then
-        val result = productListItem.toDTO()
+        val result = productListItem.toDTOWith(Optional.empty())
 
         assertEquals(productListItem.id, result.id)
         assertEquals(productListItem.thumbnailUrl, result.thumbnailUrl)

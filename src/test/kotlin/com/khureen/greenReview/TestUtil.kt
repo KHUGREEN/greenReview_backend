@@ -25,13 +25,13 @@ class TestUtil {
 
         fun getChecklist() : Checklist {
             return Checklist(
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
             )
         }
 

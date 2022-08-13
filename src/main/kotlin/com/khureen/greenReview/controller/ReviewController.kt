@@ -27,7 +27,7 @@ class ReviewController {
         @PathVariable("id") productId: Long,
         @RequestParam(value = "page", required = true) page: Int,
         @RequestParam(value = "size", required = true) size: Int
-    )  : List<ReviewListResponseElement> {
+    ): List<ReviewListResponseElement> {
         val result = getReviewService.getReviewWith(ProductId(productId), PageRequest.of(page, size)).map {
             ReviewListResponseElement(
                 id = it.id.id,
@@ -43,7 +43,7 @@ class ReviewController {
 
 
     @PostMapping("/write")
-    fun createReview(@RequestBody json: String) : ReviewWriteResponse{
+    fun createReview(@RequestBody json: String): ReviewWriteResponse {
         val mapper = jacksonObjectMapper()
         val request = mapper.readValue(json, ReviewWriteRequest::class.java)
 
@@ -64,13 +64,64 @@ class ReviewController {
     }
 
     fun getChecklistDto(checklist: List<ChecklistElement>): ChecklistDTO {
-        //???
+        return ChecklistDTO( // O(1) - no optimization needed
+            checklist.contains(hidingSideEffects),
+            checklist.contains(notSufficientEvidence),
+            checklist.contains(ambiguousStatement),
+            checklist.contains(notRelatedStatement),
+            checklist.contains(lieStatement),
+            checklist.contains(justifyingHarmingProduct),
+            checklist.contains(inappropriateCertification)
+        )
     }
+
+    val hidingSideEffects = ChecklistElement(1, "hidingSideEffects")
+
+    val notSufficientEvidence = ChecklistElement(2, "notSufficientEvidence")
+
+    val ambiguousStatement = ChecklistElement(3, "ambiguousStatement")
+
+    val notRelatedStatement = ChecklistElement(4, "notRelatedStatement")
+
+    val lieStatement = ChecklistElement(5, "lieStatement")
+
+    val justifyingHarmingProduct = ChecklistElement(6, "justifyingHarmingProduct")
+
+    val inappropriateCertification = ChecklistElement(7, "inappropriateCertification")
 
     fun getChecklistResponse(checklist: ChecklistDTO): List<ChecklistElement> {
-        //???
-    }
+        val list = mutableListOf<ChecklistElement>()
 
+        if (checklist.hidingSideEffects) {
+            list.add(hidingSideEffects)
+        }
+
+        if (checklist.notSufficientEvidence) {
+            list.add(notSufficientEvidence)
+        }
+
+        if (checklist.ambiguousStatement) {
+            list.add(ambiguousStatement)
+        }
+
+        if (checklist.notRelatedStatement) {
+            list.add(notRelatedStatement)
+        }
+
+        if (checklist.lieStatement) {
+            list.add(lieStatement)
+        }
+
+        if (checklist.justifyingHarmingProduct) {
+            list.add(justifyingHarmingProduct)
+        }
+
+        if (checklist.inappropriateCertification) {
+            list.add(inappropriateCertification)
+        }
+
+        return list
+    }
 }
 
 data class ReviewWriteRequest constructor(
@@ -91,8 +142,8 @@ data class ReviewListResponseElement constructor(
 )
 
 data class ChecklistElement constructor(
-    val id: Int,
-    val name: String
+    val id: Int, // 1 ~ 7
+    val name: String // id와 같은 의미의 값
 )
 
 data class ReviewWriteResponse constructor(

@@ -1,7 +1,6 @@
 package com.khureen.greenReview.repository
 
 import com.khureen.greenReview.TestUtil
-import com.khureen.greenReview.repository.dto.Product
 import com.khureen.greenReview.repository.dto.Review
 import org.junit.jupiter.api.Test
 
@@ -68,9 +67,9 @@ internal class ReviewRepositoryCustomImplTest {
         reviewRepository.save(oneScoredReview)
 
         //when
-        val score = reviewRepository.getAverageByProduct(product.id!!)
+        val score = reviewRepository.getReviewStatisticsBy(product.id!!)
 
         //then
-        assertEquals(0.5, score)
+        assertEquals(0.5, score.get().rate)
     }
 }
