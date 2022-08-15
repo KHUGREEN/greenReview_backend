@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
 interface ProductRepository : JpaRepository<Product, Long>, ProductRepositoryCustom {
@@ -18,7 +17,7 @@ interface ProductRepository : JpaRepository<Product, Long>, ProductRepositoryCus
 }
 
 interface ProductRepositoryCustom {
-    fun findProductWith(name : String, page: Pageable) : List<ProductListElement>
+    fun findProductWith(searchTerm : String, page: Pageable) : List<ProductListElement>
 }
 
 @Repository
@@ -26,11 +25,11 @@ interface ProductRepositoryCustom {
 @Component
 @PersistenceContext
 class ProductRepositoryCustomImpl : ProductRepositoryCustom, QuerydslRepositorySupport(Product::class.java) {
-    override fun findProductWith(name: String, page: Pageable) : List<ProductListElement> {
+    override fun findProductWith(searchTerm: String, page: Pageable) : List<ProductListElement> {
         val qProduct = QProduct.product
 
         val result = from(qProduct)
-            .where(qProduct.name.contains(name))
+            .where(qProduct.name.contains(searchTerm))
             .orderBy(qProduct.registeredDate.desc())
             .offset(page.offset)
             .limit(page.pageSize.toLong())

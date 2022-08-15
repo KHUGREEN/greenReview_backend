@@ -1,10 +1,6 @@
 package com.khureen.greenReview.service
 
-import com.khureen.greenReview.model.AddReviewDTO
-import com.khureen.greenReview.model.ChecklistDTO
-import com.khureen.greenReview.model.ProductId
-import com.khureen.greenReview.model.ReviewId
-import com.khureen.greenReview.repository.AccountRepository
+import com.khureen.greenReview.model.*
 import com.khureen.greenReview.repository.ProductRepository
 import com.khureen.greenReview.repository.ReviewRepository
 import com.khureen.greenReview.repository.dto.Checklist
@@ -14,51 +10,78 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 
-
-fun ChecklistDTO.toEntity() : Checklist {
-    return Checklist(
-        hidingSideEffects = hidingSideEffects,
-        notSufficientEvidence = notSufficientEvidence,
-        ambiguousStatement = ambiguousStatement,
-        notRelatedStatement = notRelatedStatement,
-        lieStatement = lieStatement,
-        justifyingHarmingProduct = justifyingHarmingProduct,
-        inappropriateCertification = inappropriateCertification
+fun Review.toDto(): GetReviewDTO {
+    return GetReviewDTO(
+        ReviewId(this.id!!), ReviewDTO(
+            author = this.author,
+            content = this.content,
+            rate = this.rate,
+            checklist = this.checklist.toDto(),
+            registeredDate = this.registeredDate
+        )
     )
 }
 
+fun Checklist.toDto(): ChecklistDTO {
+    return ChecklistDTO(
+        hidingSideEffects = hidingSideEffects == 1,
+        notSufficientEvidence = notSufficientEvidence == 1,
+        ambiguousStatement = ambiguousStatement == 1,
+        notRelatedStatement = notRelatedStatement == 1,
+        lieStatement = lieStatement == 1,
+        justifyingHarmingProduct = justifyingHarmingProduct == 1,
+        inappropriateCertification = inappropriateCertification == 1
+    )
+}
+
+fun ChecklistDTO.toEntity(): Checklist {
+    return Checklist(
+        hidingSideEffects = if(hidingSideEffects) 1 else 0,
+        notSufficientEvidence = if(notSufficientEvidence) 1 else 0,
+        ambiguousStatement = if(ambiguousStatement) 1 else 0,
+        notRelatedStatement = if(notRelatedStatement) 1 else 0,
+        lieStatement = if(lieStatement) 1 else 0,
+        justifyingHarmingProduct = if(justifyingHarmingProduct) 1 else 0,
+        inappropriateCertification = if(inappropriateCertification) 1 else 0
+    )
+}
+
+
+interface GetReviewService {
+    fun getReviewWith(product: ProductId, page: Pageable): List<GetReviewDTO>
+}
+
 @Service
-class GetReviewServiceImpl {
+class GetReviewServiceImpl : GetReviewService {
     @Autowired
     lateinit var reviewRepository: ReviewRepository
 
-    @Autowired
-    lateinit var accountRepository: AccountRepository
-
-    fun getReviewWith(product: ProductId, page: Pageable) : List<Review> {
-        return reviewRepository.findByProductId(product.id, page)
+    override fun getReviewWith(product: ProductId, page: Pageable): List<GetReviewDTO> {
+        return reviewRepository.findByProductId(product.id, page).map {
+            it.toDto()
+        }
     }
 }
 
 
+interface AddReviewService {
+    fun addReview(review: AddReviewDTO): ReviewId
+}
+
 @Service
-class AddReviewService {
+class AddReviewServiceImpl : AddReviewService {
     @Autowired
     lateinit var reviewRepository: ReviewRepository
-
-    @Autowired
-    lateinit var accountRepository: AccountRepository
 
     @Autowired
     lateinit var productRepository: ProductRepository
 
 
-    fun addReview(review: AddReviewDTO) : ReviewId {
-        val account = accountRepository.findById(review.account.id).get()
+    override fun addReview(review: AddReviewDTO): ReviewId {
         val product = productRepository.findById(review.product.id).get()
 
         val reviewEntity = Review(
-            author = account,
+            author = review.review.author,
             product = product,
             content = review.review.content,
             checklist = review.review.checklist.toEntity(),

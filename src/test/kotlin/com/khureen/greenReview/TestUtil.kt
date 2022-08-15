@@ -1,6 +1,5 @@
 package com.khureen.greenReview
 
-import com.khureen.greenReview.repository.dto.Account
 import com.khureen.greenReview.repository.dto.Checklist
 import com.khureen.greenReview.repository.dto.Product
 import com.khureen.greenReview.repository.dto.Review
@@ -8,68 +7,63 @@ import java.util.*
 
 class TestUtil {
     companion object {
-        fun getProduct(): Product {
+        fun getProduct(
+            name : String = "name",
+            vendor : String= "vendor",
+            price : Int = 0,
+            deliveryFee : Int = 0,
+            picUrl : MutableList<String> = mutableListOf("list"),
+            thumbnailUrl : String = "thumbnail",
+            registeredDate : Date = Date(),
+            originalUrl : String = "originalUrl"
+        ): Product {
             val product = Product(
-                name = "name",
-                vendor = "vendor",
-                price = 0,
-                deliveryFee = 0,
-                picUrl = mutableListOf("list"),
-                thumbnailUrl = "thumbnail",
+                name = name,
+                vendor = vendor,
+                price = price,
+                deliveryFee = deliveryFee,
+                picUrl = picUrl,
+                thumbnailUrl = thumbnailUrl,
                 reviews = mutableListOf(),
-                registeredDate = Date(),
-                originalUrl = "originalUrl"
+                registeredDate = registeredDate,
+                originalUrl = originalUrl
             )
 
             return product
         }
 
-        fun getAccount(): Account {
-            return Account(name = "abc", imageUrl = "unused")
-        }
-
         fun getChecklist() : Checklist {
             return Checklist(
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
             )
         }
 
-        fun getReview(): Review {
-            val product = Product(
-                name = "name",
-                vendor = "vendor",
-                price = 0,
-                deliveryFee = 0,
-                picUrl = mutableListOf("list"),
-                thumbnailUrl = "thumbnail",
-                reviews = mutableListOf(),
-                registeredDate = Date(),
-                originalUrl = "originalUrl"
+        fun getReview(
+            product: Product,
+            author : String = "account",
+            content : String = "content",
+            rate : Double = 0.0,
+            checklist : Checklist = getChecklist(),
+            registeredDate : Date = Date()
+        ): Review {
+            val review = Review(
+                author = author,
+                product = product,
+                content = content,
+                rate = rate,
+                checklist = checklist,
+                registeredDate = registeredDate
             )
 
-            val account = Account(
-                name = "name",
-                imageUrl = "url"
-            )
+            product.reviews.add(review)
 
-            product.reviews.add(
-                Review(
-                    author = account,
-                    product = product,
-                    content = "content",
-                    rate = 0.0,
-                    checklist = getChecklist(),
-                    registeredDate = Date()
-                )
-            )
-
-            return product.reviews.first()
+            return review
         }
     }
 }

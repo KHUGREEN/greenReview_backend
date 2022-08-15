@@ -1,6 +1,8 @@
 package com.khureen.greenReview.model
 
+import com.khureen.greenReview.repository.dto.Checklist
 import java.util.*
+import javax.persistence.Column
 
 data class ProductDTO constructor(
     val name: String,
@@ -27,7 +29,7 @@ data class AddProductDTO constructor(
 data class GetProductDTO constructor(
     val id: ProductId,
     val product: ProductDTO,
-    val score: ProductScore
+    val score: Optional<ProductScore>
 )
 
 data class ProductId constructor(
@@ -35,5 +37,7 @@ data class ProductId constructor(
 )
 
 data class ProductScore constructor(
-    val score: Double
+    val score: Double,
+    val reviewer : Long,
+    val checklist: ChecklistStatisticsDTO
 )

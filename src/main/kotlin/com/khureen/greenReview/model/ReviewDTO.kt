@@ -3,9 +3,7 @@ package com.khureen.greenReview.model
 import java.util.Date
 
 data class ReviewDTO constructor(
-    val author : AccountDTO,
-
-    val product: ProductDTO,
+    val author : String,
 
     val content : String,
 
@@ -18,10 +16,6 @@ data class ReviewDTO constructor(
 
 
 data class AddReviewDTO constructor(
-    val id : Long,
-
-    val account: AccountId,
-
     val product: ProductId,
 
     val review: ReviewDTO
@@ -50,4 +44,20 @@ data class ChecklistDTO constructor(
     val justifyingHarmingProduct : Boolean,
 
     val inappropriateCertification : Boolean
+)
+
+data class ChecklistStatisticsDTO constructor(
+    val hidingSideEffects : Int,
+
+    val notSufficientEvidence : Int,
+
+    val ambiguousStatement: Int,
+
+    val notRelatedStatement : Int,
+
+    val lieStatement : Int,
+
+    val justifyingHarmingProduct : Int,
+
+    val inappropriateCertification : Int
 )
