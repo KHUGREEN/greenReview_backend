@@ -15,8 +15,10 @@ class ReviewTest {
 
     @Test
     fun ctor_PersistenceTest() {
+
         // given
-        val review = TestUtil.getReview()
+        val product = TestUtil.getProduct()
+        val review = TestUtil.getReview(product)
 
         // when
         em.persist(review.product)

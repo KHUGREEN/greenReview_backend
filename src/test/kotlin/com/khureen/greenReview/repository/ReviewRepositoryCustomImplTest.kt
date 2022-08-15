@@ -1,6 +1,8 @@
 package com.khureen.greenReview.repository
 
 import com.khureen.greenReview.TestUtil
+import com.khureen.greenReview.repository.dto.Checklist
+import com.khureen.greenReview.repository.dto.Product
 import com.khureen.greenReview.repository.dto.Review
 import org.junit.jupiter.api.Test
 
@@ -25,7 +27,31 @@ internal class ReviewRepositoryCustomImplTest {
     @Transactional
     fun findByProductId() {
         //given
-        val review = TestUtil.getReview()
+
+        val product = Product(
+            name = "name",
+            vendor = "vendor",
+            price = 0,
+            deliveryFee = 0,
+            picUrl = mutableListOf("list"),
+            thumbnailUrl = "thumbnail",
+            reviews = mutableListOf(),
+            registeredDate = Date(),
+            originalUrl = "originalUrl"
+        )
+
+        product.reviews.add(
+            Review(
+                author = "account",
+                product = product,
+                content = "content",
+                rate = 0.0,
+                checklist = TestUtil.getChecklist(),
+                registeredDate = Date()
+            )
+        )
+
+        val review = product.reviews.first()
         entityManager.persist(review.product)
         entityManager.persist(review)
 
@@ -38,38 +64,86 @@ internal class ReviewRepositoryCustomImplTest {
 
     @Test
     @Transactional
+    fun getAverageByProductIdWhen() {
+
+        // given
+        val a_product = TestUtil.getProduct()
+        val a_all_review = TestUtil.getReview(a_product, checklist = Checklist(
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ))
+
+        val a_some_review = TestUtil.getReview(a_product, checklist = Checklist(
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ))
+
+        entityManager.persist(a_product)
+
+        reviewRepository.save(a_all_review)
+        reviewRepository.save(a_some_review)
+
+        val b_product = TestUtil.getProduct()
+        val b_all_review = TestUtil.getReview(b_product, checklist = Checklist(
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        )
+        )
+
+        entityManager.persist(b_product)
+        reviewRepository.save(b_all_review)
+
+        // when
+
+        val result = reviewRepository.getAverageChecklistBy(a_product.id!!)
+
+        // then
+
+        assertEquals(1, result.get().ambiguousStatement)
+        assertEquals(2, result.get().hidingSideEffects)
+    }
+
+    @Test
+    @Transactional
     fun getAverageByProductId() {
 
         //given
-        val product = TestUtil.getProduct()
+        val a_product = TestUtil.getProduct(name = "a") // should not be affected from other product's review
+        val b_product = TestUtil.getProduct(name = "b")
 
-        val zeroScoredReview = Review(
-            author = "account",
-            product = product,
-            content = "",
-            registeredDate = Date(),
-            rate = 0.0,
-            checklist = TestUtil.getChecklist()
-        )
+        val a_zeroScoredReview = TestUtil.getReview(a_product, rate = 0.0)
 
-        val oneScoredReview = Review(
-            author = "account",
-            product = product,
-            content = "",
-            registeredDate = Date(),
-            rate = 1.0,
-            checklist = TestUtil.getChecklist()
-        )
+        val a_oneScoredReview = TestUtil.getReview(a_product, rate = 1.0)
 
-        entityManager.persist(product)
+        val b_zeroScoredReview = TestUtil.getReview(b_product, rate = 0.0)
 
-        reviewRepository.save(zeroScoredReview)
-        reviewRepository.save(oneScoredReview)
+        reviewRepository.save(a_zeroScoredReview)
+        reviewRepository.save(a_oneScoredReview)
+        reviewRepository.save(b_zeroScoredReview)
+
+        entityManager.persist(a_product)
+        entityManager.persist(b_product)
 
         //when
-        val score = reviewRepository.getReviewStatisticsBy(product.id!!)
+        val score = reviewRepository.getReviewStatisticsBy(a_product.id!!)
 
         //then
         assertEquals(0.5, score.get().rate)
+        assertEquals(2, score.get().reviewer)
     }
 }
