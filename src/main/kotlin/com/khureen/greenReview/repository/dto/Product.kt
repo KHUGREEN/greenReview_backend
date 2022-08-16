@@ -4,7 +4,7 @@ import java.util.Date
 import javax.persistence.*
 
 @Entity
-@Table(indexes = [Index(name = "i_date", columnList = "registeredDate")])
+@Table(indexes = [Index(name = "i_product_date", columnList = "registeredDate")])
 class Product(
     @Id
     @Column(name = "product_id", nullable = false)
