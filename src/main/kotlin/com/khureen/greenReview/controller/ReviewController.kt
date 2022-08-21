@@ -6,6 +6,7 @@ import com.khureen.greenReview.model.ChecklistDTO
 import com.khureen.greenReview.model.ProductId
 import com.khureen.greenReview.model.ReviewDTO
 import com.khureen.greenReview.service.AddReviewService
+import com.khureen.greenReview.service.ChecklistService
 import com.khureen.greenReview.service.GetReviewService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -35,7 +36,7 @@ class ReviewController {
                 nickname = it.review.author,
                 content = it.review.content,
                 rate = it.review.rate,
-                checklist = getChecklistResponse(it.review.checklist)
+                checkTypes = getChecklistResponse(it.review.checklist)
             )
         }
 
@@ -64,61 +65,35 @@ class ReviewController {
         return ReviewWriteResponse(result.id)
     }
 
-    fun getChecklistDto(checklist: List<ChecklistElement>): ChecklistDTO {
+    fun getChecklistDto(checklist: List<Int>): ChecklistDTO {
         return ChecklistDTO( // O(1) - no optimization needed
-            checklist.contains(hidingSideEffects),
-            checklist.contains(notSufficientEvidence),
-            checklist.contains(ambiguousStatement),
-            checklist.contains(notRelatedStatement),
-            checklist.contains(lieStatement),
-            checklist.contains(justifyingHarmingProduct),
-            checklist.contains(inappropriateCertification)
+            false,
+            checklist.contains(ChecklistService.notSufficientEvidence.id),
+            checklist.contains(ChecklistService.ambiguousStatement.id),
+            false,
+            checklist.contains(ChecklistService.lieStatement.id),
+            false,
+            checklist.contains(ChecklistService.inappropriateCertification.id)
         )
     }
 
-    val hidingSideEffects = ChecklistElement(1, "hidingSideEffects")
-
-    val notSufficientEvidence = ChecklistElement(2, "notSufficientEvidence")
-
-    val ambiguousStatement = ChecklistElement(3, "ambiguousStatement")
-
-    val notRelatedStatement = ChecklistElement(4, "notRelatedStatement")
-
-    val lieStatement = ChecklistElement(5, "lieStatement")
-
-    val justifyingHarmingProduct = ChecklistElement(6, "justifyingHarmingProduct")
-
-    val inappropriateCertification = ChecklistElement(7, "inappropriateCertification")
-
-    fun getChecklistResponse(checklist: ChecklistDTO): List<ChecklistElement> {
-        val list = mutableListOf<ChecklistElement>()
-
-        if (checklist.hidingSideEffects) {
-            list.add(hidingSideEffects)
-        }
+    fun getChecklistResponse(checklist: ChecklistDTO): List<Int> {
+        val list = mutableListOf<Int>()
 
         if (checklist.notSufficientEvidence) {
-            list.add(notSufficientEvidence)
+            list.add(ChecklistService.notSufficientEvidence.id)
         }
 
         if (checklist.ambiguousStatement) {
-            list.add(ambiguousStatement)
-        }
-
-        if (checklist.notRelatedStatement) {
-            list.add(notRelatedStatement)
+            list.add(ChecklistService.ambiguousStatement.id)
         }
 
         if (checklist.lieStatement) {
-            list.add(lieStatement)
-        }
-
-        if (checklist.justifyingHarmingProduct) {
-            list.add(justifyingHarmingProduct)
+            list.add(ChecklistService.lieStatement.id)
         }
 
         if (checklist.inappropriateCertification) {
-            list.add(inappropriateCertification)
+            list.add(ChecklistService.inappropriateCertification.id)
         }
 
         return list
@@ -130,7 +105,7 @@ data class ReviewWriteRequest constructor(
     val content: String,
     val rate: Double,
     val productId: Long,
-    val checklists: List<ChecklistElement>
+    val checklists: List<Int>
 )
 
 
@@ -139,12 +114,7 @@ data class ReviewListResponseElement constructor(
     val nickname: String,
     val content: String,
     val rate: Double,
-    val checklist: List<ChecklistElement>
-)
-
-data class ChecklistElement constructor(
-    val id: Int, // 1 ~ 7
-    val name: String // id와 같은 의미의 값
+    val checkTypes: List<Int>
 )
 
 data class ReviewWriteResponse constructor(

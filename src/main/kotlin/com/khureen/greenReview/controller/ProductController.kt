@@ -2,6 +2,7 @@ package com.khureen.greenReview.controller
 
 import com.khureen.greenReview.model.ChecklistDTO
 import com.khureen.greenReview.model.ChecklistStatisticsDTO
+import com.khureen.greenReview.service.ChecklistService
 import com.khureen.greenReview.service.GetProductListService
 import com.khureen.greenReview.service.GetProductService
 import org.springframework.beans.factory.annotation.Autowired
@@ -69,13 +70,10 @@ class ProductController {
 
     fun getChecklistResponse(checklist: ChecklistStatisticsDTO): List<ChecklistStatistics> {
         return listOf(
-            ChecklistStatistics(1, "hidingSideEffects", checklist.hidingSideEffects),
-            ChecklistStatistics(2, "notSufficientEvidence", checklist.notSufficientEvidence),
-            ChecklistStatistics(3, "ambiguousStatement", checklist.ambiguousStatement),
-            ChecklistStatistics(4, "notRelatedStatement", checklist.notRelatedStatement),
-            ChecklistStatistics(5, "lieStatement", checklist.lieStatement),
-            ChecklistStatistics(6, "justifyingHarmingProduct", checklist.justifyingHarmingProduct),
-            ChecklistStatistics(7, "inappropriateCertification", checklist.inappropriateCertification)
+            ChecklistStatistics(ChecklistService.notSufficientEvidence.id,  checklist.notSufficientEvidence),
+            ChecklistStatistics(ChecklistService.ambiguousStatement.id, checklist.ambiguousStatement),
+            ChecklistStatistics(ChecklistService.lieStatement.id, checklist.lieStatement),
+            ChecklistStatistics(ChecklistService.inappropriateCertification.id, checklist.inappropriateCertification)
         )
     }
 }
@@ -109,6 +107,5 @@ data class GetProductListResponseElement constructor(
 
 data class ChecklistStatistics constructor(
     val id: Int, // 1 ~ 7
-    val name: String, // id와 같은 의미의 값
     val num : Int // 선택한 사람의 수
 )

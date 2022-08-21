@@ -30,7 +30,7 @@ dependencies {
 	implementation("com.h2database:h2")
 	implementation("com.fasterxml.jackson.core:jackson-core:2.13.3")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
-
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.3")
 
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
