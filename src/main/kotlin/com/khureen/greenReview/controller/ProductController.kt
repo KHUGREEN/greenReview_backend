@@ -1,7 +1,8 @@
 package com.khureen.greenReview.controller
 
-import com.khureen.greenReview.model.ChecklistDTO
-import com.khureen.greenReview.model.ChecklistStatisticsDTO
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.khureen.greenReview.model.*
+import com.khureen.greenReview.service.AddProductService
 import com.khureen.greenReview.service.ChecklistService
 import com.khureen.greenReview.service.GetProductListService
 import com.khureen.greenReview.service.GetProductService
@@ -9,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @Controller
@@ -24,6 +22,9 @@ class ProductController {
 
     @Autowired
     lateinit var getProductDetailService: GetProductService
+
+    @Autowired
+    lateinit var addProductService: AddProductService
 
     @GetMapping("/detail/{id}")
     fun getProductDetail(@PathVariable("id") productId: Long) : GetProductDetailResponse {
@@ -68,6 +69,31 @@ class ProductController {
         return ResponseEntity.ok(result) // Enforces empty array response otherwise get error response
     }
 
+    @PostMapping("/")
+    fun addProduct(@RequestBody json: String) {
+        val mapper = jacksonObjectMapper()
+        val request = try {
+            mapper.readValue(json, AddProductRequest::class.java)
+        } catch (e: Exception) {
+            throw ApiException("invaild json: ${e.message}, ${e.stackTraceToString()}", HttpStatusCode.REQUEST_ERROR)
+        }
+
+        addProductService.addProduct(
+            AddProductDTO(
+                ProductDTO(
+                    name = request.name,
+                    vendor = request.vendor,
+                    price = request.price,
+                    deliveryFee = request.deliveryFee,
+                    picUrl = request.picUrl,
+                    registeredDate = request.registeredDate,
+                    thumbnailUrl = request.thumbnailUrl,
+                    originalUrl = request.originalUrl
+                )
+            )
+        )
+    }
+
     fun getChecklistResponse(checklist: ChecklistStatisticsDTO): List<ChecklistStatistics> {
         return listOf(
             ChecklistStatistics(ChecklistService.notSufficientEvidence.id,  checklist.notSufficientEvidence),
@@ -79,7 +105,23 @@ class ProductController {
 }
 
 
+data class AddProductRequest constructor(
+    val name: String,
 
+    val vendor: String,
+
+    val price: Int,
+
+    val deliveryFee: Int,
+
+    val picUrl: List<String>,
+
+    val registeredDate: Date,
+
+    val thumbnailUrl : String,
+
+    val originalUrl : String
+)
 
 data class GetProductDetailResponse constructor(
     val id : Long,

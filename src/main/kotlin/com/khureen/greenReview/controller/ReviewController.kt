@@ -1,10 +1,7 @@
 package com.khureen.greenReview.controller
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.khureen.greenReview.model.AddReviewDTO
-import com.khureen.greenReview.model.ChecklistDTO
-import com.khureen.greenReview.model.ProductId
-import com.khureen.greenReview.model.ReviewDTO
+import com.khureen.greenReview.model.*
 import com.khureen.greenReview.service.AddReviewService
 import com.khureen.greenReview.service.ChecklistService
 import com.khureen.greenReview.service.GetReviewService
@@ -47,7 +44,11 @@ class ReviewController {
     @PostMapping("/write")
     fun createReview(@RequestBody json: String): ReviewWriteResponse {
         val mapper = jacksonObjectMapper()
-        val request = mapper.readValue(json, ReviewWriteRequest::class.java)
+        val request = try {
+            mapper.readValue(json, ReviewWriteRequest::class.java)
+        } catch (e: Exception) {
+            throw ApiException("invaild json: ${e.message}, ${e.stackTraceToString()}", HttpStatusCode.REQUEST_ERROR)
+        }
 
         val result = addReviewService.addReview(
             AddReviewDTO(

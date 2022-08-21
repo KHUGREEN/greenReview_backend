@@ -5,7 +5,7 @@ import com.khureen.greenReview.service.ChecklistService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
-@RestController // @Controller를 포함함
+@RestController
 class ChecklistController {
 
     @GetMapping("/checklists")
