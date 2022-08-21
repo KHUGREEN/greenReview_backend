@@ -6,5 +6,6 @@ enum class HttpStatusCode {
     INTERNAL_ERROR
 }
 
-class ApiException(message: String?, val statusCode: HttpStatusCode) : Exception(message) {
-}
+open class ApiException(message: String?, val statusCode: HttpStatusCode) : Exception(message)
+
+class ProductIdNotFoundException(id: Long) : ApiException("can't found product id: $id", HttpStatusCode.NOT_FOUND)

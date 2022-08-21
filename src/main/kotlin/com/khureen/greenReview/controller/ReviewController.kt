@@ -9,6 +9,7 @@ import com.khureen.greenReview.service.AddReviewService
 import com.khureen.greenReview.service.GetReviewService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -27,7 +28,7 @@ class ReviewController {
         @PathVariable("id") productId: Long,
         @RequestParam(value = "page", required = true) page: Int,
         @RequestParam(value = "size", required = true) size: Int
-    ): List<ReviewListResponseElement> {
+    ): ResponseEntity<List<ReviewListResponseElement>> {
         val result = getReviewService.getReviewWith(ProductId(productId), PageRequest.of(page, size)).map {
             ReviewListResponseElement(
                 id = it.id.id,
@@ -38,7 +39,7 @@ class ReviewController {
             )
         }
 
-        return result
+        return ResponseEntity.ok(result)
     }
 
 

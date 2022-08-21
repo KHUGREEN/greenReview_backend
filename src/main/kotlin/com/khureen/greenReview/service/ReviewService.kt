@@ -36,13 +36,13 @@ fun Checklist.toDto(): ChecklistDTO {
 
 fun ChecklistDTO.toEntity(): Checklist {
     return Checklist(
-        hidingSideEffects = if(hidingSideEffects) 1 else 0,
-        notSufficientEvidence = if(notSufficientEvidence) 1 else 0,
-        ambiguousStatement = if(ambiguousStatement) 1 else 0,
-        notRelatedStatement = if(notRelatedStatement) 1 else 0,
-        lieStatement = if(lieStatement) 1 else 0,
-        justifyingHarmingProduct = if(justifyingHarmingProduct) 1 else 0,
-        inappropriateCertification = if(inappropriateCertification) 1 else 0
+        hidingSideEffects = if (hidingSideEffects) 1 else 0,
+        notSufficientEvidence = if (notSufficientEvidence) 1 else 0,
+        ambiguousStatement = if (ambiguousStatement) 1 else 0,
+        notRelatedStatement = if (notRelatedStatement) 1 else 0,
+        lieStatement = if (lieStatement) 1 else 0,
+        justifyingHarmingProduct = if (justifyingHarmingProduct) 1 else 0,
+        inappropriateCertification = if (inappropriateCertification) 1 else 0
     )
 }
 
@@ -56,7 +56,14 @@ class GetReviewServiceImpl : GetReviewService {
     @Autowired
     lateinit var reviewRepository: ReviewRepository
 
+    @Autowired
+    lateinit var productRepository: ProductRepository
+
     override fun getReviewWith(product: ProductId, page: Pageable): List<GetReviewDTO> {
+        productRepository.findById(product.id).orElseThrow {
+            throw ProductIdNotFoundException(product.id)
+        } // just for check (remove?)
+
         return reviewRepository.findByProductId(product.id, page).map {
             it.toDto()
         }
@@ -78,7 +85,16 @@ class AddReviewServiceImpl : AddReviewService {
 
 
     override fun addReview(review: AddReviewDTO): ReviewId {
-        val product = productRepository.findById(review.product.id).get()
+        val product = productRepository.findById(review.product.id).orElseThrow {
+            throw ProductIdNotFoundException(review.product.id)
+        }
+
+        if (!checkReviewIntegrity(review)) {
+            throw ApiException(
+                "malformed input: author and content should not be empty and rate is between 0.0 and 5.0",
+                HttpStatusCode.REQUEST_ERROR
+            )
+        }
 
         val reviewEntity = Review(
             author = review.review.author,
@@ -93,5 +109,9 @@ class AddReviewServiceImpl : AddReviewService {
         product.reviews.add(reviewEntity)
 
         return ReviewId(reviewEntity.id!!)
+    }
+
+    private fun checkReviewIntegrity(review: AddReviewDTO): Boolean {
+        return review.review.author.isBlank() or review.review.content.isBlank() or ((review.review.rate > 5.0) or (review.review.rate < 0.0))
     }
 }

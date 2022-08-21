@@ -6,6 +6,7 @@ import com.khureen.greenReview.service.GetProductListService
 import com.khureen.greenReview.service.GetProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -46,7 +47,7 @@ class ProductController {
         @RequestParam(value = "q", required = true) query: String,
         @RequestParam(value = "page", required = true) page: Int,
         @RequestParam(value = "size", required = true) size: Int
-    ) : List<GetProductListResponseElement> {
+    ) : ResponseEntity<List<GetProductListResponseElement>> {
         val result = getProductListService.getProductList(
             query,
             PageRequest.of(page, size)
@@ -63,7 +64,7 @@ class ProductController {
             )
         }
 
-        return result
+        return ResponseEntity.ok(result) // Enforces empty array response otherwise get error response
     }
 
     fun getChecklistResponse(checklist: ChecklistStatisticsDTO): List<ChecklistStatistics> {
