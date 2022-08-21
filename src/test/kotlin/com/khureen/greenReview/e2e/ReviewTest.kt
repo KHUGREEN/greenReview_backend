@@ -7,7 +7,20 @@ import org.springframework.boot.test.context.SpringBootTest
 class ReviewTest {
 
     @Test
-    fun reviewTest() {
+    fun reviewAddTest() {
+        //given
 
     }
 }
+
+/*
+*
+*
+                    price = request.price,
+                    deliveryFee = request.deliveryFee,
+                    picUrl = request.picUrl,
+                    registeredDate = request.registeredDate,
+                    thumbnailUrl = request.thumbnailUrl,
+                    originalUrl = request.originalUrl
+*
+* */

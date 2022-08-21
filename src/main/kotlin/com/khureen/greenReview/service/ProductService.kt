@@ -3,7 +3,6 @@ package com.khureen.greenReview.service
 import com.khureen.greenReview.model.*
 import com.khureen.greenReview.repository.ProductRepository
 import com.khureen.greenReview.repository.ReviewRepository
-import com.khureen.greenReview.repository.dto.Checklist
 import com.khureen.greenReview.repository.dto.Product
 import com.khureen.greenReview.repository.dto.ProductListElement
 import com.khureen.greenReview.service.dto.ProductListResponse
@@ -47,20 +46,24 @@ class AddProductService {
     @Autowired
     lateinit var productRepository: ProductRepository
 
-    fun addProduct(product: AddProductDTO) {
-        productRepository.save(
-            Product(
-                name = product.product.name,
-                vendor = product.product.vendor,
-                picUrl = product.product.picUrl.toMutableList(),
-                thumbnailUrl = product.product.thumbnailUrl,
-                price = product.product.price,
-                deliveryFee = product.product.deliveryFee,
-                registeredDate = product.product.registeredDate,
-                reviews = mutableListOf(),
-                originalUrl = product.product.originalUrl
-            )
+    fun addProduct(product: AddProductDTO) : ProductId{
+        val result = Product(
+            name = product.product.name,
+            vendor = product.product.vendor,
+            picUrl = product.product.picUrl.toMutableList(),
+            thumbnailUrl = product.product.thumbnailUrl,
+            price = product.product.price,
+            deliveryFee = product.product.deliveryFee,
+            registeredDate = product.product.registeredDate,
+            reviews = mutableListOf(),
+            originalUrl = product.product.originalUrl
         )
+
+        productRepository.save(
+            result
+        )
+
+        return ProductId(result.id!!)
     }
 }
 

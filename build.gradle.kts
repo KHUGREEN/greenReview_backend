@@ -43,8 +43,12 @@ dependencies {
 	}
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("io.rest-assured:rest-assured:5.1.1") {
+		exclude("org.apache.groovy") // groovy class path issue > https://github.com/rest-assured/rest-assured/issues/1612
+	}
 	testImplementation(platform("org.junit:junit-bom:5.9.0"))
 	testImplementation("org.junit.jupiter:junit-jupiter")
+	testRuntimeOnly ("org.junit.vintage:junit-vintage-engine:5.9.0")
 }
 
 tasks.test {

@@ -27,10 +27,10 @@ class ProductController {
     lateinit var addProductService: AddProductService
 
     @GetMapping("/detail/{id}")
-    fun getProductDetail(@PathVariable("id") productId: Long) : GetProductDetailResponse {
-        val result = getProductDetailService.getProductById(productId)
+    fun getProductDetail(@PathVariable("id") productId: Int): ResponseEntity<GetProductDetailResponse> {
+        val result = getProductDetailService.getProductById(productId.toLong())
 
-        return GetProductDetailResponse(
+        return ResponseEntity.ok(GetProductDetailResponse(
             id = result.product.id.id,
             pic_url = result.product.product.originalUrl,
             name = result.product.product.name,
@@ -41,7 +41,7 @@ class ProductController {
             rate = result.product.score.map { it.score },
             reviewer = result.product.score.map { it.reviewer },
             checkList = result.product.score.map { getChecklistResponse(it.checklist) }
-        )
+        ))
     }
 
     @GetMapping("/list")
@@ -49,7 +49,7 @@ class ProductController {
         @RequestParam(value = "q", required = true) query: String,
         @RequestParam(value = "page", required = true) page: Int,
         @RequestParam(value = "size", required = true) size: Int
-    ) : ResponseEntity<List<GetProductListResponseElement>> {
+    ): ResponseEntity<List<GetProductListResponseElement>> {
         val result = getProductListService.getProductList(
             query,
             PageRequest.of(page, size)
@@ -69,8 +69,8 @@ class ProductController {
         return ResponseEntity.ok(result) // Enforces empty array response otherwise get error response
     }
 
-    @PostMapping("/")
-    fun addProduct(@RequestBody json: String) {
+    @PostMapping("/add")
+    fun addProduct(@RequestBody json: String): ResponseEntity<AddProductResponse> {
         val mapper = jacksonObjectMapper()
         val request = try {
             mapper.readValue(json, AddProductRequest::class.java)
@@ -78,7 +78,7 @@ class ProductController {
             throw ApiException("invaild json: ${e.message}, ${e.stackTraceToString()}", HttpStatusCode.REQUEST_ERROR)
         }
 
-        addProductService.addProduct(
+        val result = addProductService.addProduct(
             AddProductDTO(
                 ProductDTO(
                     name = request.name,
@@ -92,11 +92,13 @@ class ProductController {
                 )
             )
         )
+
+        return ResponseEntity.ok(AddProductResponse(result.id))
     }
 
     fun getChecklistResponse(checklist: ChecklistStatisticsDTO): List<ChecklistStatistics> {
         return listOf(
-            ChecklistStatistics(ChecklistService.notSufficientEvidence.id,  checklist.notSufficientEvidence),
+            ChecklistStatistics(ChecklistService.notSufficientEvidence.id, checklist.notSufficientEvidence),
             ChecklistStatistics(ChecklistService.ambiguousStatement.id, checklist.ambiguousStatement),
             ChecklistStatistics(ChecklistService.lieStatement.id, checklist.lieStatement),
             ChecklistStatistics(ChecklistService.inappropriateCertification.id, checklist.inappropriateCertification)
@@ -104,6 +106,10 @@ class ProductController {
     }
 }
 
+
+data class AddProductResponse constructor(
+    val id: Long
+)
 
 data class AddProductRequest constructor(
     val name: String,
@@ -118,36 +124,36 @@ data class AddProductRequest constructor(
 
     val registeredDate: Date,
 
-    val thumbnailUrl : String,
+    val thumbnailUrl: String,
 
-    val originalUrl : String
+    val originalUrl: String
 )
 
 data class GetProductDetailResponse constructor(
-    val id : Long,
-    val pic_url : String,
-    val name : String,
-    val vendor : String,
-    val price : Int,
-    val deliveryFee : Int,
-    val originalURL : String,
-    val rate : Optional<Double>,
+    val id: Long,
+    val pic_url: String,
+    val name: String,
+    val vendor: String,
+    val price: Int,
+    val deliveryFee: Int,
+    val originalURL: String,
+    val rate: Optional<Double>,
     val reviewer: Optional<Long>,
     val checkList: Optional<List<ChecklistStatistics>>
 )
 
 data class GetProductListResponseElement constructor(
-    val id : Long,
-    val picThumbnail : String,
-    val name : String,
-    val vendor : String,
-    val price : Int,
-    val rate : Optional<Double>,
-    val reviewer : Optional<Long>,
-    val checkList : Optional<List<ChecklistStatistics>>
+    val id: Long,
+    val picThumbnail: String,
+    val name: String,
+    val vendor: String,
+    val price: Int,
+    val rate: Optional<Double>,
+    val reviewer: Optional<Long>,
+    val checkList: Optional<List<ChecklistStatistics>>
 )
 
 data class ChecklistStatistics constructor(
     val id: Int, // 1 ~ 7
-    val num : Int // 선택한 사람의 수
+    val num: Int // 선택한 사람의 수
 )
