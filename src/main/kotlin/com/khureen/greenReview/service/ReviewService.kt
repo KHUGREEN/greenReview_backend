@@ -89,7 +89,7 @@ class AddReviewServiceImpl : AddReviewService {
             throw ProductIdNotFoundException(review.product.id)
         }
 
-        if (!checkReviewIntegrity(review)) {
+        if (isMalformedReview(review)) {
             throw ApiException(
                 "malformed input: author and content should not be empty and rate is between 0.0 and 5.0",
                 HttpStatusCode.REQUEST_ERROR
@@ -111,7 +111,7 @@ class AddReviewServiceImpl : AddReviewService {
         return ReviewId(reviewEntity.id!!)
     }
 
-    private fun checkReviewIntegrity(review: AddReviewDTO): Boolean {
-        return review.review.author.isBlank() or review.review.content.isBlank() or ((review.review.rate > 5.0) or (review.review.rate < 0.0))
+    private fun isMalformedReview(review: AddReviewDTO): Boolean {
+        return review.review.author.isBlank() or review.review.content.isBlank() or ((review.review.rate >= 5.0) or (review.review.rate <= 0.0))
     }
 }

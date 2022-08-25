@@ -30,7 +30,7 @@ dependencies {
 	implementation("com.h2database:h2")
 	implementation("com.fasterxml.jackson.core:jackson-core:2.13.3")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
-
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.3")
 
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
@@ -43,8 +43,12 @@ dependencies {
 	}
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("io.rest-assured:rest-assured:5.1.1") {
+		exclude("org.apache.groovy") // groovy class path issue > https://github.com/rest-assured/rest-assured/issues/1612
+	}
 	testImplementation(platform("org.junit:junit-bom:5.9.0"))
 	testImplementation("org.junit.jupiter:junit-jupiter")
+	testRuntimeOnly ("org.junit.vintage:junit-vintage-engine:5.9.0")
 }
 
 tasks.test {
