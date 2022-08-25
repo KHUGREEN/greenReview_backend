@@ -57,7 +57,7 @@ class ReviewController {
                     request.nickname,
                     request.content,
                     request.rate,
-                    getChecklistDto(request.checklists),
+                    getChecklistDto(request.checkTypes),
                     Date()
                 )
             )
@@ -106,7 +106,7 @@ data class ReviewWriteRequest constructor(
     val content: String,
     val rate: Double,
     val productId: Long,
-    val checklists: List<Int>
+    val checkTypes: List<Int>
 )
 
 
