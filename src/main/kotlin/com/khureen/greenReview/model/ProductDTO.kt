@@ -19,7 +19,9 @@ data class ProductDTO constructor(
 
     val thumbnailUrl : String,
 
-    val originalUrl : String
+    val originalUrl : String,
+
+    val detailpicUrl: List<String>
 )
 
 data class AddProductDTO constructor(
