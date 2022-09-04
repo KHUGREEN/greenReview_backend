@@ -42,6 +42,8 @@ dependencies {
 		}
 	}
 
+	runtimeOnly("org.postgresql:postgresql")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.rest-assured:rest-assured:5.1.1") {
 		exclude("org.apache.groovy") // groovy class path issue > https://github.com/rest-assured/rest-assured/issues/1612
