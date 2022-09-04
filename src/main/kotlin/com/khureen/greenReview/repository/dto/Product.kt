@@ -38,5 +38,10 @@ class Product(
     var registeredDate : Date,
 
     @Column(nullable = false)
-    var originalUrl : String
+    var originalUrl : String,
+
+    @ElementCollection
+    @Column(nullable = false)
+    var detailpicUrl : MutableList<String>
+
 )

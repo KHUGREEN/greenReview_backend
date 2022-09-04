@@ -15,7 +15,8 @@ class TestUtil {
             picUrl : MutableList<String> = mutableListOf("list"),
             thumbnailUrl : String = "thumbnail",
             registeredDate : Date = Date(),
-            originalUrl : String = "originalUrl"
+            originalUrl : String = "originalUrl",
+            detailUrl : MutableList<String> = mutableListOf()
         ): Product {
             val product = Product(
                 name = name,
@@ -26,7 +27,8 @@ class TestUtil {
                 thumbnailUrl = thumbnailUrl,
                 reviews = mutableListOf(),
                 registeredDate = registeredDate,
-                originalUrl = originalUrl
+                originalUrl = originalUrl,
+                detailpicUrl = detailUrl
             )
 
             return product

@@ -24,7 +24,8 @@ class ReviewTest {
             "picUrl" to listOf("pic_URl"),
             "registeredDate" to "2019-05-30T08:36:47.966274Z",
             "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL"
+            "originalUrl" to "original_URL",
+            "detailpicUrl" to listOf("detail")
         )
 
         val addReview_params = mapOf<String, Any>(
@@ -68,7 +69,8 @@ class ReviewTest {
             "picUrl" to listOf("pic_URl"),
             "registeredDate" to "2019-05-30T08:36:47.966274Z",
             "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL"
+            "originalUrl" to "original_URL",
+            "detailpicUrl" to listOf("detail")
         )
 
         val addReview_params = mapOf<String, Any>(
