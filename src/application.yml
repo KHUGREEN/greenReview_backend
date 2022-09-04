@@ -22,3 +22,14 @@ logging:
   level:
     org.hibernate: info
     org.springframework: info
+
+---
+
+spring:
+  profiles: prod
+  hikari:
+    datasource:
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: ${JDBC_DATABASE_URL}
+      username: ${JDBC_DATABASE_USERNAME}
+      password: ${JDBC_DATABASE_PASSWORD}
