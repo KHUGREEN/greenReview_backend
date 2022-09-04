@@ -86,8 +86,8 @@ class ProductController {
                     vendor = request.vendor,
                     price = request.price,
                     deliveryFee = request.deliveryFee,
-                    picUrl = request.picUrl,
-                    registeredDate = request.registeredDate,
+                    picUrl = listOf(request.picUrl),
+                    registeredDate = Date(),
                     thumbnailUrl = request.thumbnailUrl,
                     originalUrl = request.originalUrl,
                     detailpicUrl = request.detailpicUrl
@@ -122,9 +122,7 @@ data class AddProductRequest constructor(
 
     val deliveryFee: Int,
 
-    val picUrl: List<String>,
-
-    val registeredDate: Date,
+    val picUrl: String,
 
     val thumbnailUrl: String,
 
