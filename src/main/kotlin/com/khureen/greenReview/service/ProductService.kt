@@ -36,7 +36,8 @@ fun Product.toGetDTOWith(score: Optional<ProductScore>): GetProductDTO {
             picUrl = this.picUrl.map { it }.toList(),
             registeredDate = this.registeredDate,
             thumbnailUrl = this.thumbnailUrl,
-            originalUrl = this.originalUrl
+            originalUrl = this.originalUrl,
+            detailpicUrl = this.detailpicUrl
         ),
         score
     )
@@ -58,7 +59,8 @@ class AddProductService {
                 deliveryFee = product.product.deliveryFee,
                 registeredDate = product.product.registeredDate,
                 reviews = mutableListOf(),
-                originalUrl = product.product.originalUrl
+                originalUrl = product.product.originalUrl,
+                detailpicUrl = product.product.detailpicUrl.toMutableList()
             )
         )
     }
