@@ -24,7 +24,7 @@ class Product(
     var deliveryFee : Int,
 
     @ElementCollection
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2048)
     var picUrl : MutableList<String>,
 
     @Column(nullable = false)
@@ -37,11 +37,11 @@ class Product(
     @Column(nullable = false)
     var registeredDate : Date,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2048)
     var originalUrl : String,
 
     @ElementCollection
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2048)
     var detailpicUrl : MutableList<String>
 
 )
