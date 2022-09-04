@@ -21,8 +21,7 @@ class ReviewTest {
             "vendor" to "vendor",
             "price" to 3000,
             "deliveryFee" to 300,
-            "picUrl" to listOf("pic_URl"),
-            "registeredDate" to "2019-05-30T08:36:47.966274Z",
+            "picUrl" to "pic_URl",
             "thumbnailUrl" to "thumb_URL",
             "originalUrl" to "original_URL",
             "detailpicUrl" to listOf("detail")
@@ -66,8 +65,7 @@ class ReviewTest {
             "vendor" to "vendor",
             "price" to 3000,
             "deliveryFee" to 300,
-            "picUrl" to listOf("pic_URl"),
-            "registeredDate" to "2019-05-30T08:36:47.966274Z",
+            "picUrl" to "pic_URl",
             "thumbnailUrl" to "thumb_URL",
             "originalUrl" to "original_URL",
             "detailpicUrl" to listOf("detail")

@@ -23,7 +23,7 @@ class Review(
     @JoinColumn(name = "product_id")
     var product: Product,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 2048)
     var content: String,
 
     @Column(nullable = false)
