@@ -13,6 +13,13 @@ import org.springframework.stereotype.Service
 import java.util.*
 import javax.transaction.Transactional
 
+/**
+ *
+ * A DetailPic Url Separator. Detail pic url will join and splits with this char.
+ * Workaround for Heroku free plan row limits.
+ * */
+const val DETAILPIC_URL_SEPARATOR : Char = '\u0713'
+
 fun ProductListElement.toDTOWith(score: Optional<ProductScore>): ProductListElementDTO {
     return ProductListElementDTO(
         this.id,
@@ -36,7 +43,7 @@ fun Product.toGetDTOWith(score: Optional<ProductScore>): GetProductDTO {
             registeredDate = this.registeredDate,
             thumbnailUrl = this.thumbnailUrl,
             originalUrl = this.originalUrl,
-            detailpicUrl = this.detailpicUrl
+            detailpicUrl = this.detailpicUrl.split(DETAILPIC_URL_SEPARATOR)
         ),
         score
     )
@@ -58,7 +65,7 @@ class AddProductService {
             registeredDate = product.product.registeredDate,
             reviews = mutableListOf(),
             originalUrl = product.product.originalUrl,
-            detailpicUrl = product.product.detailpicUrl.toMutableList()
+            detailpicUrl = product.product.detailpicUrl.joinToString(separator = DETAILPIC_URL_SEPARATOR.toString())
         )
 
         productRepository.save(

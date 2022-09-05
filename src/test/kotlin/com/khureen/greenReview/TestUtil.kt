@@ -16,7 +16,7 @@ class TestUtil {
             thumbnailUrl : String = "thumbnail",
             registeredDate : Date = Date(),
             originalUrl : String = "originalUrl",
-            detailUrl : MutableList<String> = mutableListOf()
+            detailUrl : String = "detaulUrl"
         ): Product {
             val product = Product(
                 name = name,
