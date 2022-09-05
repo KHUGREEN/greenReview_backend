@@ -12,7 +12,7 @@ class TestUtil {
             vendor : String= "vendor",
             price : Int = 0,
             deliveryFee : Int = 0,
-            picUrl : MutableList<String> = mutableListOf("list"),
+            picUrl :String = "list",
             thumbnailUrl : String = "thumbnail",
             registeredDate : Date = Date(),
             originalUrl : String = "originalUrl",

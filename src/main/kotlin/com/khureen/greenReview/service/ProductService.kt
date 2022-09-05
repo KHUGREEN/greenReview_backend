@@ -39,7 +39,7 @@ fun Product.toGetDTOWith(score: Optional<ProductScore>): GetProductDTO {
             vendor = this.vendor,
             price = this.price,
             deliveryFee = this.deliveryFee,
-            picUrl = this.picUrl.map { it }.toList(),
+            picUrl = this.picUrl,
             registeredDate = this.registeredDate,
             thumbnailUrl = this.thumbnailUrl,
             originalUrl = this.originalUrl,
@@ -58,7 +58,7 @@ class AddProductService {
         val result = Product(
             name = product.product.name,
             vendor = product.product.vendor,
-            picUrl = product.product.picUrl.toMutableList(),
+            picUrl = product.product.picUrl,
             thumbnailUrl = product.product.thumbnailUrl,
             price = product.product.price,
             deliveryFee = product.product.deliveryFee,

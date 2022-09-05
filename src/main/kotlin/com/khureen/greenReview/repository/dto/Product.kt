@@ -23,9 +23,8 @@ class Product(
     @Column(nullable = false)
     var deliveryFee : Int,
 
-    @ElementCollection
     @Column(nullable = false, length = 2048)
-    var picUrl : MutableList<String>,
+    var picUrl : String,
 
     @Column(nullable = false)
     var thumbnailUrl : String,
