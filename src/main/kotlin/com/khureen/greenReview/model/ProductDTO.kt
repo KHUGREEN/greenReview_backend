@@ -13,7 +13,7 @@ data class ProductDTO constructor(
 
     val deliveryFee: Int,
 
-    val picUrl: List<String>,
+    val picUrl: String,
 
     val registeredDate: Date,
 

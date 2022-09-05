@@ -32,7 +32,7 @@ class ProductController {
 
         return ResponseEntity.ok(GetProductDetailResponse(
             id = result.product.id.id,
-            pic_url = result.product.product.picUrl[0],
+            pic_url = result.product.product.picUrl,
             name = result.product.product.name,
             vendor = result.product.product.vendor,
             price = result.product.product.price,
@@ -86,7 +86,7 @@ class ProductController {
                     vendor = request.vendor,
                     price = request.price,
                     deliveryFee = request.deliveryFee,
-                    picUrl = listOf(request.picUrl),
+                    picUrl = request.picUrl,
                     registeredDate = Date(),
                     thumbnailUrl = request.thumbnailUrl,
                     originalUrl = request.originalUrl,

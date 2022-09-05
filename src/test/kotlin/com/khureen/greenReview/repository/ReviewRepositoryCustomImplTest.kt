@@ -33,7 +33,7 @@ internal class ReviewRepositoryCustomImplTest {
             vendor = "vendor",
             price = 0,
             deliveryFee = 0,
-            picUrl = mutableListOf("list"),
+            picUrl = "list",
             thumbnailUrl = "thumbnail",
             reviews = mutableListOf(),
             registeredDate = Date(),
