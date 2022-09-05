@@ -32,7 +32,7 @@ class ProductController {
 
         return ResponseEntity.ok(GetProductDetailResponse(
             id = result.product.id.id,
-            pic_url = result.product.product.originalUrl,
+            pic_url = result.product.product.picUrl[0],
             name = result.product.product.name,
             vendor = result.product.product.vendor,
             price = result.product.product.price,

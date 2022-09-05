@@ -156,6 +156,7 @@ class ProductTest {
         assertEquals("original_URL", response.body().jsonPath().get("originalURL"))
         assertEquals(300, response.body().jsonPath().get("deliveryFee"))
         assertEquals(listOf("detail1", "detail2"), response.body().jsonPath().get("detailpicUrl"))
+        assertEquals("pic_URl", response.body().jsonPath().get("pic_url"))
 
         val checkList : List<LinkedHashMap<String, Any>> = response.body().jsonPath().get("checkList") as List<LinkedHashMap<String, Any>>
 
