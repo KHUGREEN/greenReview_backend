@@ -40,8 +40,6 @@ class Product(
     @Column(nullable = false, length = 2048)
     var originalUrl : String,
 
-    @ElementCollection
-    @Column(nullable = false, length = 2048)
-    var detailpicUrl : MutableList<String>
-
+    @Column(nullable = false, length = 40960)
+    var detailpicUrl : String
 )

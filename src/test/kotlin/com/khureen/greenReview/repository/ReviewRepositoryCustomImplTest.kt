@@ -38,7 +38,7 @@ internal class ReviewRepositoryCustomImplTest {
             reviews = mutableListOf(),
             registeredDate = Date(),
             originalUrl = "originalUrl",
-            detailpicUrl = mutableListOf()
+            detailpicUrl = "detailUrl"
         )
 
         product.reviews.add(

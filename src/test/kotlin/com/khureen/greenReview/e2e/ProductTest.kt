@@ -131,7 +131,7 @@ class ProductTest {
             "picUrl" to "pic_URl",
             "thumbnailUrl" to "thumb_URL",
             "originalUrl" to "original_URL",
-            "detailpicUrl" to listOf("detail")
+            "detailpicUrl" to listOf("detail1", "detail2")
         )
 
         RestAssured.given().log().all()
@@ -155,8 +155,8 @@ class ProductTest {
         assertEquals(0, response.body().jsonPath().get("reviewer"))
         assertEquals("original_URL", response.body().jsonPath().get("originalURL"))
         assertEquals(300, response.body().jsonPath().get("deliveryFee"))
+        assertEquals(listOf("detail1", "detail2"), response.body().jsonPath().get("detailpicUrl"))
         assertEquals("pic_URl", response.body().jsonPath().get("pic_url"))
-        assertEquals(listOf("detail"), response.body().jsonPath().get("detailpicUrl"))
 
         val checkList : List<LinkedHashMap<String, Any>> = response.body().jsonPath().get("checkList") as List<LinkedHashMap<String, Any>>
 
