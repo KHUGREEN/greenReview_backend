@@ -101,7 +101,7 @@ class GetProductServiceImpl : GetProductService {
             val s = reviewStatistics.get()
             val a = avgChecklist.get()
 
-            Optional.of(ProductScore(s.rate, s.reviewer, a))
+            Optional.of(ProductScore(s.reviewer, a))
         } else {
             Optional.empty<ProductScore>()
         }
@@ -135,7 +135,7 @@ class GetProductListServiceImpl : GetProductListService {
                 val s = reviewStatistics.get()
                 val a = avgChecklist.get()
 
-                Optional.of(ProductScore(s.rate, s.reviewer, a))
+                Optional.of(ProductScore(s.reviewer, a))
             } else {
                 Optional.empty<ProductScore>()
             }

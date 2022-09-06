@@ -144,7 +144,6 @@ internal class ReviewRepositoryCustomImplTest {
         val score = reviewRepository.getReviewStatisticsBy(a_product.id!!)
 
         //then
-        assertEquals(0.5, score.get().rate)
         assertEquals(2, score.get().reviewer)
     }
 }

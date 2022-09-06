@@ -75,8 +75,7 @@ class ReviewRepositoryCustomImpl : ReviewRepositoryCustom, QuerydslRepositorySup
             .select(
                 Projections.constructor(
                     ReviewStatistics::class.java,
-                    qReview.count(),
-                    qReview.rate.avg()
+                    qReview.count()
                 )
             )
             .fetchOne()
@@ -87,6 +86,5 @@ class ReviewRepositoryCustomImpl : ReviewRepositoryCustom, QuerydslRepositorySup
 }
 
 class ReviewStatistics constructor(
-    val reviewer: Long,
-    val rate: Double
+    val reviewer: Long
 )

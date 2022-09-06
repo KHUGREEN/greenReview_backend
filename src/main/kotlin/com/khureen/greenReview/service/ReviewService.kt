@@ -15,7 +15,6 @@ fun Review.toDto(): GetReviewDTO {
         ReviewId(this.id!!), ReviewDTO(
             author = this.author,
             content = this.content,
-            rate = this.rate,
             checklist = this.checklist.toDto(),
             registeredDate = this.registeredDate
         )
@@ -101,7 +100,7 @@ class AddReviewServiceImpl : AddReviewService {
             product = product,
             content = review.review.content,
             checklist = review.review.checklist.toEntity(),
-            rate = review.review.rate,
+            rate = 0.0,
             registeredDate = review.review.registeredDate
         )
 
@@ -112,6 +111,6 @@ class AddReviewServiceImpl : AddReviewService {
     }
 
     private fun isMalformedReview(review: AddReviewDTO): Boolean {
-        return review.review.author.isBlank() or review.review.content.isBlank() or ((review.review.rate >= 5.0) or (review.review.rate <= 0.0))
+        return review.review.author.isBlank() or review.review.content.isBlank()
     }
 }
