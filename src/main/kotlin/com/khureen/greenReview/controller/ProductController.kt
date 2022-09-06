@@ -39,7 +39,6 @@ class ProductController {
             deliveryFee = result.product.product.deliveryFee,
             originalURL = result.product.product.originalUrl,
             detailpicUrl = result.product.product.detailpicUrl,
-            rate = result.product.score.map { it.score },
             reviewer = result.product.score.map { it.reviewer },
             checkList = result.product.score.map { getChecklistResponse(it.checklist) }
         ))
@@ -62,8 +61,7 @@ class ProductController {
                 vendor = it.vendor,
                 price = it.price,
                 reviewer = it.score.map { it.reviewer },
-                checkList = it.score.map { getChecklistResponse(it.checklist) },
-                rate = it.score.map { it.score }
+                checkList = it.score.map { getChecklistResponse(it.checklist) }
             )
         }
 
@@ -140,7 +138,6 @@ data class GetProductDetailResponse constructor(
     val deliveryFee: Int,
     val originalURL: String,
     val detailpicUrl: List<String>,
-    val rate: Optional<Double>,
     val reviewer: Optional<Long>,
     val checkList: Optional<List<ChecklistStatistics>>
 )
@@ -151,7 +148,6 @@ data class GetProductListResponseElement constructor(
     val name: String,
     val vendor: String,
     val price: Int,
-    val rate: Optional<Double>,
     val reviewer: Optional<Long>,
     val checkList: Optional<List<ChecklistStatistics>>
 )

@@ -7,8 +7,6 @@ data class ReviewDTO constructor(
 
     val content : String,
 
-    val rate : Double,
-
     val checklist: ChecklistDTO,
 
     val registeredDate: Date

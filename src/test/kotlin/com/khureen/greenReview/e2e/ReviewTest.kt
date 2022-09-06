@@ -31,7 +31,6 @@ class ReviewTest {
             "productId" to 1,
             "nickname" to "nickname",
             "content" to "content",
-            "rate" to 0.1,
             "checkTypes" to arrayOf(2)
         )
 
@@ -75,7 +74,6 @@ class ReviewTest {
             "productId" to 1,
             "nickname" to "nickname",
             "content" to "content",
-            "rate" to 0.1,
             "checkTypes" to arrayOf(2)
         )
 
@@ -108,6 +106,5 @@ class ReviewTest {
         Assertions.assertEquals(2, response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["id"])
         Assertions.assertEquals("content", response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["content"])
         Assertions.assertEquals("nickname", response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["nickname"])
-        Assertions.assertEquals(0.1f, response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["rate"])
     }
 }

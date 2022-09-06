@@ -39,7 +39,6 @@ data class ProductId constructor(
 )
 
 data class ProductScore constructor(
-    val score: Double,
     val reviewer : Long,
     val checklist: ChecklistStatisticsDTO
 )
