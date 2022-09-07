@@ -106,5 +106,6 @@ class ReviewTest {
         Assertions.assertEquals(2, response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["id"])
         Assertions.assertEquals("content", response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["content"])
         Assertions.assertEquals("nickname", response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["nickname"])
+        Assertions.assertEquals(listOf(2), response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["checkTypes"])
     }
 }
