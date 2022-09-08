@@ -5,6 +5,7 @@ import com.khureen.greenReview.repository.ProductRepository
 import com.khureen.greenReview.repository.ReviewRepository
 import com.khureen.greenReview.repository.dto.Product
 import com.khureen.greenReview.repository.dto.ProductListElement
+import com.khureen.greenReview.service.dto.ProductChecklistResponse
 import com.khureen.greenReview.service.dto.ProductListResponse
 import com.khureen.greenReview.service.dto.ProductResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -49,6 +50,13 @@ fun Product.toGetDTOWith(score: Optional<ProductScore>): GetProductDTO {
     )
 }
 
+fun Product.toGetChecklistDTOWith(score: Optional<ProductScore>) : GetProductScoreDTO {
+    return GetProductScoreDTO(
+        ProductId(this.id!!),
+        score
+    )
+}
+
 @Service
 class AddProductService {
     @Autowired
@@ -78,6 +86,8 @@ class AddProductService {
 
 interface GetProductService {
     fun getProductById(id: Long): ProductResponse
+
+    fun getProductChecklistById(id: Long): ProductChecklistResponse
 }
 
 @Service
@@ -94,6 +104,22 @@ class GetProductServiceImpl : GetProductService {
             throw ApiException("can't find product matching with id", HttpStatusCode.NOT_FOUND)
         }
 
+        val optionalScore = getOptionalScore(id)
+
+        return ProductResponse(dto.toGetDTOWith(optionalScore))
+    }
+
+    override fun getProductChecklistById(id: Long): ProductChecklistResponse {
+        val dto = productRepo.findById(id).orElseThrow {
+            throw ApiException("can't find product matching with id", HttpStatusCode.NOT_FOUND)
+        } // TODO: Optimize? may require custom methods for repo
+
+        val optionalScore = getOptionalScore(id)
+
+        return ProductChecklistResponse(dto.toGetChecklistDTOWith(optionalScore))
+    }
+
+    private fun getOptionalScore(id: Long): Optional<ProductScore> {
         val avgChecklist = reviewRepo.getAverageChecklistBy(id)
         val reviewStatistics = reviewRepo.getReviewStatisticsBy(id)
 
@@ -105,8 +131,7 @@ class GetProductServiceImpl : GetProductService {
         } else {
             Optional.empty<ProductScore>()
         }
-
-        return ProductResponse(dto.toGetDTOWith(optionalScore))
+        return optionalScore
     }
 }
 

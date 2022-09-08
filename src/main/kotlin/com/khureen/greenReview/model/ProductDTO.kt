@@ -42,3 +42,8 @@ data class ProductScore constructor(
     val reviewer : Long,
     val checklist: ChecklistStatisticsDTO
 )
+
+data class GetProductScoreDTO constructor(
+    val id: ProductId,
+    val score: Optional<ProductScore>
+)
