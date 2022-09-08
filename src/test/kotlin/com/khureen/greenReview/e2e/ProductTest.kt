@@ -121,6 +121,62 @@ class ProductTest {
     }
 
     @Test
+    fun getProductChecklistTest() {
+        // given
+        val addProduct_params = mapOf<String, Any>(
+            "name" to "name",
+            "vendor" to "vendor",
+            "price" to 3000,
+            "deliveryFee" to 300,
+            "picUrl" to "pic_URl",
+            "thumbnailUrl" to "thumb_URL",
+            "originalUrl" to "original_URL",
+            "detailpicUrl" to listOf("detail1", "detail2")
+        )
+
+        RestAssured.given().log().all()
+            .body(addProduct_params)
+            .contentType(ContentType.JSON)
+            .`when`()
+            .post("/product/add")
+
+
+        val addReview_params = mapOf<String, Any>(
+            "productId" to 1,
+            "nickname" to "nickname",
+            "content" to "content",
+            "checkTypes" to arrayOf(1, 2, 3, 4)
+        )
+
+
+        RestAssured.given().log().all()
+            .`when`()
+            .body(addReview_params)
+            .contentType(ContentType.JSON)
+            .post("/review/write")
+            .then().log().all()
+            .extract()
+
+
+        // when
+        val response =RestAssured.given().log().all()
+            .`when`()
+            .get("/product/review/1")
+            .then().log().all()
+            .extract()
+
+        // then
+        assertEquals(200, response.statusCode())
+        val checkList : List<LinkedHashMap<String, Any>> = response.body().jsonPath().get("checkList") as List<LinkedHashMap<String, Any>>
+
+        assert(
+            checkList.all {
+                it["num"]!!.equals(1)
+            }
+        )
+    }
+
+    @Test
     fun getProductDetailTest() {
         // given
         val addProduct_params = mapOf<String, Any>(
@@ -139,6 +195,7 @@ class ProductTest {
             .contentType(ContentType.JSON)
             .`when`()
             .post("/product/add")
+
 
         // when
         val response =RestAssured.given().log().all()

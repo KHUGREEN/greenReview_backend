@@ -44,6 +44,18 @@ class ProductController {
         ))
     }
 
+    @GetMapping("/review/{id}")
+    fun getProductChecklist(@PathVariable("id") productId: Int): ResponseEntity<GetProductChecklistResponse> {
+        val result = getProductDetailService.getProductChecklistById(productId.toLong())
+
+        return ResponseEntity.ok(
+            GetProductChecklistResponse(
+                id = result.product.id.id,
+                checkList = result.product.score.map { getChecklistResponse(it.checklist) }
+            )
+        )
+    }
+
     @GetMapping("/list")
     fun getProductList(
         @RequestParam(value = "q", required = true) query: String,
@@ -105,6 +117,11 @@ class ProductController {
         )
     }
 }
+
+data class GetProductChecklistResponse constructor(
+    val id: Long,
+    val checkList: Optional<List<ChecklistStatistics>>
+)
 
 
 data class AddProductResponse constructor(
