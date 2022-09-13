@@ -146,4 +146,25 @@ internal class ReviewRepositoryCustomImplTest {
         //then
         assertEquals(2, score.get().reviewer)
     }
+
+    @Test
+    @Transactional
+    fun getReviewListByProductId() {
+
+        //given
+
+        val product = TestUtil.getProduct()
+        entityManager.persist(product)
+
+        for (i in 0 until 11) {
+            val review = TestUtil.getReview(product)
+
+            reviewRepository.save(review)
+        }
+
+        //when
+        val result = reviewRepository.findByProductId(product.id!!, PageRequest.of(0, 10))
+
+        assertEquals(10, result.size)
+    }
 }
