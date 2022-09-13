@@ -105,6 +105,7 @@ class AddReviewServiceImpl : AddReviewService {
         )
 
         reviewRepository.save(reviewEntity)
+        reviewRepository.invalidateCache(product.id!!)
         product.reviews.add(reviewEntity)
 
         return ReviewId(reviewEntity.id!!)

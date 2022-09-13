@@ -1,7 +1,6 @@
 package com.khureen.greenReview.repository
 
 import com.khureen.greenReview.model.ChecklistStatisticsDTO
-import com.khureen.greenReview.repository.dto.Checklist
 import com.khureen.greenReview.repository.dto.QReview
 import com.khureen.greenReview.repository.dto.Review
 import com.querydsl.core.types.Projections
@@ -11,6 +10,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.util.ConcurrentLruCache
 import java.util.*
 import javax.persistence.PersistenceContext
 
@@ -25,6 +25,8 @@ interface ReviewRepositoryCustom {
     fun getAverageChecklistBy(productId: Long): Optional<ChecklistStatisticsDTO>
 
     fun getReviewStatisticsBy(productId: Long) : Optional<ReviewStatistics>
+
+    fun invalidateCache(productId: Long)
 }
 
 @Repository
@@ -32,6 +34,14 @@ interface ReviewRepositoryCustom {
 @Component
 @PersistenceContext
 class ReviewRepositoryCustomImpl : ReviewRepositoryCustom, QuerydslRepositorySupport(Review::class.java) {
+    val reviewerCache = ConcurrentLruCache<Long, Optional<ReviewStatistics>>(100) {
+        getReviewStatisticsBy_Internal(it)
+    }
+
+    val checklistCache = ConcurrentLruCache<Long, Optional<ChecklistStatisticsDTO>>(100) {
+        getAverageChecklistBy_Internal(it)
+    }
+
     override fun findByProductId(productId: Long, page: Pageable): List<Review> {
         val qReview = QReview.review
 
@@ -45,7 +55,7 @@ class ReviewRepositoryCustomImpl : ReviewRepositoryCustom, QuerydslRepositorySup
         return result
     }
 
-    override fun getAverageChecklistBy(productId: Long): Optional<ChecklistStatisticsDTO> {
+    private fun getAverageChecklistBy_Internal(productId: Long) : Optional<ChecklistStatisticsDTO> {
         val qReview = QReview.review
 
         val avgChecklist = from(qReview)
@@ -67,7 +77,11 @@ class ReviewRepositoryCustomImpl : ReviewRepositoryCustom, QuerydslRepositorySup
         return Optional.ofNullable(avgChecklist)
     }
 
-    override fun getReviewStatisticsBy(productId: Long): Optional<ReviewStatistics> {
+    override fun getAverageChecklistBy(productId: Long): Optional<ChecklistStatisticsDTO> {
+        return checklistCache.get(productId)
+    }
+
+    private fun getReviewStatisticsBy_Internal(productId: Long): Optional<ReviewStatistics> {
         val qReview = QReview.review
 
         val result = from(qReview)
@@ -81,6 +95,15 @@ class ReviewRepositoryCustomImpl : ReviewRepositoryCustom, QuerydslRepositorySup
             .fetchOne()
 
         return Optional.ofNullable(result)
+    }
+
+    override fun getReviewStatisticsBy(productId: Long): Optional<ReviewStatistics> {
+        return reviewerCache.get(productId)
+    }
+
+    override fun invalidateCache(productId: Long) {
+        reviewerCache.remove(productId)
+        checklistCache.remove(productId)
     }
 
 }
