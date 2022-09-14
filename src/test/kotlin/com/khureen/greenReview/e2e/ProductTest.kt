@@ -1,6 +1,5 @@
 package com.khureen.greenReview.e2e
 
-import com.khureen.greenReview.controller.GetProductListResponseElement
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -11,21 +10,24 @@ import org.springframework.test.annotation.DirtiesContext
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class ProductTest {
+
+    val addProduct_params = mapOf(
+        "name" to "name",
+        "vendor" to "vendor",
+        "price" to 3000,
+        "deliveryFee" to 300,
+        "picUrl" to "pic_URl",
+        "thumbnailUrl" to "thumb_URL",
+        "originalUrl" to "original_URL",
+        "detailpicUrl" to listOf("detail1", "detail2")
+    )
+
+
     @Test
     fun addProductTest() {
         // given
-        val addProduct_params = mapOf<String, Any>(
-            "name" to "name",
-            "vendor" to "vendor",
-            "price" to 3000,
-            "deliveryFee" to 300,
-            "picUrl" to "pic_URl",
-            "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL",
-            "detailpicUrl" to listOf("detail")
-        )
 
         // when
         val response = RestAssured.given().log().all()
@@ -46,16 +48,6 @@ class ProductTest {
     @Test
     fun getProductListExistsTest() {
         // given
-        val addProduct_params = mapOf<String, Any>(
-            "name" to "name",
-            "vendor" to "vendor",
-            "price" to 3000,
-            "deliveryFee" to 300,
-            "picUrl" to "pic_URl",
-            "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL",
-            "detailpicUrl" to listOf("detail")
-        )
 
         RestAssured.given().log().all()
             .body(addProduct_params)
@@ -65,7 +57,7 @@ class ProductTest {
             .body().prettyPrint()
 
         // when
-        val response =RestAssured.given().log().all()
+        val response = RestAssured.given().log().all()
             .`when`()
             .get("/product/list?q=name&page=0&size=1")
             .then().log().all()
@@ -78,7 +70,8 @@ class ProductTest {
         assertEquals(3000, response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["price"])
         assertEquals(0, response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["reviewer"])
 
-        val checkList : List<LinkedHashMap<String, Any>> = response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["checkList"] as List<LinkedHashMap<String, Any>>
+        val checkList: List<LinkedHashMap<String, Any>> = response.body().jsonPath()
+            .getList<LinkedHashMap<String, Any>>("$")[0]["checkList"] as List<LinkedHashMap<String, Any>>
 
         assert(
             checkList.all {
@@ -91,16 +84,6 @@ class ProductTest {
     @Test
     fun getProductListNoneTest() {
         // given
-        val addProduct_params = mapOf<String, Any>(
-            "name" to "name",
-            "vendor" to "vendor",
-            "price" to 3000,
-            "deliveryFee" to 300,
-            "picUrl" to "pic_URl",
-            "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL",
-            "detailpicUrl" to listOf("detail")
-        )
 
         RestAssured.given().log().all()
             .body(addProduct_params)
@@ -109,7 +92,7 @@ class ProductTest {
             .post("/product/add")
 
         // when
-        val response =RestAssured.given().log().all()
+        val response = RestAssured.given().log().all()
             .`when`()
             .get("/product/list?q=nope&page=0&size=1")
             .then().log().all()
@@ -123,16 +106,6 @@ class ProductTest {
     @Test
     fun getProductChecklistTest() {
         // given
-        val addProduct_params = mapOf<String, Any>(
-            "name" to "name",
-            "vendor" to "vendor",
-            "price" to 3000,
-            "deliveryFee" to 300,
-            "picUrl" to "pic_URl",
-            "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL",
-            "detailpicUrl" to listOf("detail1", "detail2")
-        )
 
         RestAssured.given().log().all()
             .body(addProduct_params)
@@ -140,18 +113,16 @@ class ProductTest {
             .`when`()
             .post("/product/add")
 
-
-        val addReview_params = mapOf<String, Any>(
-            "productId" to 1,
-            "nickname" to "nickname",
-            "content" to "content",
-            "checkTypes" to arrayOf(1, 2, 3, 4)
-        )
-
-
         RestAssured.given().log().all()
             .`when`()
-            .body(addReview_params)
+            .body(
+                mapOf<String, Any>(
+                    "productId" to 1,
+                    "nickname" to "nickname",
+                    "content" to "content",
+                    "checkTypes" to arrayOf(1, 2, 3, 4)
+                )
+            )
             .contentType(ContentType.JSON)
             .post("/review/write")
             .then().log().all()
@@ -159,7 +130,7 @@ class ProductTest {
 
 
         // when
-        val response =RestAssured.given().log().all()
+        val response = RestAssured.given().log().all()
             .`when`()
             .get("/product/review/1")
             .then().log().all()
@@ -167,7 +138,8 @@ class ProductTest {
 
         // then
         assertEquals(200, response.statusCode())
-        val checkList : List<LinkedHashMap<String, Any>> = response.body().jsonPath().get("checkList") as List<LinkedHashMap<String, Any>>
+        val checkList: List<LinkedHashMap<String, Any>> =
+            response.body().jsonPath().get("checkList") as List<LinkedHashMap<String, Any>>
 
         assert(
             checkList.all {
@@ -179,16 +151,6 @@ class ProductTest {
     @Test
     fun getProductDetailTest() {
         // given
-        val addProduct_params = mapOf<String, Any>(
-            "name" to "name",
-            "vendor" to "vendor",
-            "price" to 3000,
-            "deliveryFee" to 300,
-            "picUrl" to "pic_URl",
-            "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL",
-            "detailpicUrl" to listOf("detail1", "detail2")
-        )
 
         RestAssured.given().log().all()
             .body(addProduct_params)
@@ -198,7 +160,7 @@ class ProductTest {
 
 
         // when
-        val response =RestAssured.given().log().all()
+        val response = RestAssured.given().log().all()
             .`when`()
             .get("/product/detail/1")
             .then().log().all()
@@ -215,7 +177,8 @@ class ProductTest {
         assertEquals(listOf("detail1", "detail2"), response.body().jsonPath().get("detailpicUrl"))
         assertEquals("pic_URl", response.body().jsonPath().get("pic_url"))
 
-        val checkList : List<LinkedHashMap<String, Any>> = response.body().jsonPath().get("checkList") as List<LinkedHashMap<String, Any>>
+        val checkList: List<LinkedHashMap<String, Any>> =
+            response.body().jsonPath().get("checkList") as List<LinkedHashMap<String, Any>>
 
         assert(
             checkList.all {

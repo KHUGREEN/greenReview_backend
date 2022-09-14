@@ -14,27 +14,20 @@ import org.springframework.test.annotation.DirtiesContext
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class ReviewTest {
 
+    val addProduct_params = mapOf(
+        "name" to "name",
+        "vendor" to "vendor",
+        "price" to 3000,
+        "deliveryFee" to 300,
+        "picUrl" to "pic_URl",
+        "thumbnailUrl" to "thumb_URL",
+        "originalUrl" to "original_URL",
+        "detailpicUrl" to listOf("detail1", "detail2")
+    )
+
     @Test
     fun reviewAddTest() {
         // given
-        val addProduct_params = mapOf<String, Any>(
-            "name" to "name",
-            "vendor" to "vendor",
-            "price" to 3000,
-            "deliveryFee" to 300,
-            "picUrl" to "pic_URl",
-            "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL",
-            "detailpicUrl" to listOf("detail")
-        )
-
-        val addReview_params = mapOf<String, Any>(
-            "productId" to 1,
-            "nickname" to "nickname",
-            "content" to "content",
-            "checkTypes" to arrayOf(2)
-        )
-
         RestAssured.given().log().all()
             .body(addProduct_params)
             .contentType(ContentType.JSON)
@@ -45,7 +38,14 @@ class ReviewTest {
         // when
         val response = RestAssured.given().log().all()
             .`when`()
-            .body(addReview_params)
+            .body(
+                mapOf<String, Any>(
+                    "productId" to 1,
+                    "nickname" to "nickname",
+                    "content" to "content",
+                    "checkTypes" to arrayOf(2)
+                )
+            )
             .contentType(ContentType.JSON)
             .post("/review/write")
             .then().log().all()
@@ -60,16 +60,6 @@ class ReviewTest {
     @Test
     fun reviewCacheInvalidateTest() {
         // given
-        val addProduct_params = mapOf<String, Any>(
-            "name" to "name",
-            "vendor" to "vendor",
-            "price" to 3000,
-            "deliveryFee" to 300,
-            "picUrl" to "pic_URl",
-            "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL",
-            "detailpicUrl" to listOf("detail")
-        )
 
         RestAssured.given().log().all()
             .body(addProduct_params)
@@ -83,17 +73,16 @@ class ReviewTest {
             .then().log().all()
             .extract()
 
-
-        val addReview_params = mapOf<String, Any>(
-            "productId" to 1,
-            "nickname" to "nickname",
-            "content" to "content",
-            "checkTypes" to arrayOf(2)
-        )
-
         RestAssured.given().log().all()
             .`when`()
-            .body(addReview_params)
+            .body(
+                mapOf<String, Any>(
+                    "productId" to 1,
+                    "nickname" to "nickname",
+                    "content" to "content",
+                    "checkTypes" to arrayOf(2)
+                )
+            )
             .contentType(ContentType.JSON)
             .post("/review/write")
             .then().log().all()
@@ -108,7 +97,8 @@ class ReviewTest {
         assertEquals(0, firstResponse.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["reviewer"])
         assertEquals(1, secondResponse.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["reviewer"])
 
-        val firstCheckList : List<LinkedHashMap<String, Any>> = firstResponse.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["checkList"] as List<LinkedHashMap<String, Any>>
+        val firstCheckList: List<LinkedHashMap<String, Any>> = firstResponse.body().jsonPath()
+            .getList<LinkedHashMap<String, Any>>("$")[0]["checkList"] as List<LinkedHashMap<String, Any>>
 
         assert(
             firstCheckList.all {
@@ -116,7 +106,8 @@ class ReviewTest {
             }
         )
 
-        val secondChecklist:  List<LinkedHashMap<String, Any>> = secondResponse.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["checkList"] as List<LinkedHashMap<String, Any>>
+        val secondChecklist: List<LinkedHashMap<String, Any>> = secondResponse.body().jsonPath()
+            .getList<LinkedHashMap<String, Any>>("$")[0]["checkList"] as List<LinkedHashMap<String, Any>>
 
         assert(
             secondChecklist.map {
@@ -129,23 +120,6 @@ class ReviewTest {
     @Test
     fun reviewListTest() {
         // given
-        val addProduct_params = mapOf<String, Any>(
-            "name" to "name",
-            "vendor" to "vendor",
-            "price" to 3000,
-            "deliveryFee" to 300,
-            "picUrl" to "pic_URl",
-            "thumbnailUrl" to "thumb_URL",
-            "originalUrl" to "original_URL",
-            "detailpicUrl" to listOf("detail")
-        )
-
-        val addReview_params = mapOf<String, Any>(
-            "productId" to 1,
-            "nickname" to "nickname",
-            "content" to "content",
-            "checkTypes" to arrayOf(2)
-        )
 
         RestAssured.given().log().all()
             .body(addProduct_params)
@@ -156,7 +130,14 @@ class ReviewTest {
 
         RestAssured.given().log().all()
             .`when`()
-            .body(addReview_params)
+            .body(
+                mapOf<String, Any>(
+                    "productId" to 1,
+                    "nickname" to "nickname",
+                    "content" to "content",
+                    "checkTypes" to arrayOf(2)
+                )
+            )
             .contentType(ContentType.JSON)
             .post("/review/write")
             .then().log().all()
@@ -174,8 +155,17 @@ class ReviewTest {
         // then
         Assertions.assertEquals(200, response.statusCode())
         Assertions.assertEquals(2, response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["id"])
-        Assertions.assertEquals("content", response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["content"])
-        Assertions.assertEquals("nickname", response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["nickname"])
-        Assertions.assertEquals(listOf(2), response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["checkTypes"])
+        Assertions.assertEquals(
+            "content",
+            response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["content"]
+        )
+        Assertions.assertEquals(
+            "nickname",
+            response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["nickname"]
+        )
+        Assertions.assertEquals(
+            listOf(2),
+            response.body().jsonPath().getList<LinkedHashMap<String, Any>>("$")[0]["checkTypes"]
+        )
     }
 }

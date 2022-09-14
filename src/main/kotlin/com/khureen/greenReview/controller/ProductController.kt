@@ -105,7 +105,7 @@ class ProductController {
             )
         )
 
-        return ResponseEntity.ok(AddProductResponse(result.id))
+        return ResponseEntity.ok(AddProductResponse(result.id)) // Enforces empty array response otherwise get error response
     }
 
     fun getChecklistResponse(checklist: ChecklistStatisticsDTO): List<ChecklistStatistics> {
