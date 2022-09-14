@@ -151,7 +151,6 @@ class GetProductListServiceImpl : GetProductListService {
     override fun getProductList(searchTerm: String, page: Pageable): ProductListResponse {
         val productList = productRepo.findProductWith(searchTerm, page)
 
-        // TODO: CACHE it
         val reviewList = productList.map {
             val avgChecklist = reviewRepo.getAverageChecklistBy(it.id)
             val reviewStatistics = reviewRepo.getReviewStatisticsBy(it.id)

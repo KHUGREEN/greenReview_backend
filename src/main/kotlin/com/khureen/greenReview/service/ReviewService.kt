@@ -90,7 +90,7 @@ class AddReviewServiceImpl : AddReviewService {
 
         if (isMalformedReview(review)) {
             throw ApiException(
-                "malformed input: author and content should not be empty and rate is between 0.0 and 5.0",
+                "malformed input: author and content should not be empty.",
                 HttpStatusCode.REQUEST_ERROR
             )
         }
@@ -105,7 +105,7 @@ class AddReviewServiceImpl : AddReviewService {
         )
 
         reviewRepository.save(reviewEntity)
-        reviewRepository.invalidateCache(product.id!!)
+        reviewRepository.invalidateCache(product.id!!) // need to invalidate otherwise get cache consistency errors.
         product.reviews.add(reviewEntity)
 
         return ReviewId(reviewEntity.id!!)
