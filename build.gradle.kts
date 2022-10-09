@@ -32,9 +32,6 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.13.3")
 
-
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-
 	kapt(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
 	sourceSets.main {
 		withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class) {
