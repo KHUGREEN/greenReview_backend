@@ -18,9 +18,11 @@ package com.khureen.greenReview.controller
 
 import com.khureen.greenReview.service.ChecklistElement
 import com.khureen.greenReview.service.ChecklistService
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 class ChecklistController {
 
