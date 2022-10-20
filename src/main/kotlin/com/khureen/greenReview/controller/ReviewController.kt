@@ -27,7 +27,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-
+@CrossOrigin(maxAge = 3600)
 @RestController // @Controller를 포함함
 @RequestMapping("review")
 class ReviewController {
