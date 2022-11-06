@@ -43,6 +43,14 @@ class ProductController {
     @Autowired
     lateinit var addProductService: AddProductService
 
+    @GetMapping("/size")
+    fun getProductSize(@RequestParam(value = "q", required = true) query: String) : ResponseEntity<GetProductListSizeResponse>{
+        val result = getProductListService.getProductMaxSize(query)
+
+        return ResponseEntity.ok(GetProductListSizeResponse(result.maxSize))
+    }
+
+
     @GetMapping("/detail/{id}")
     fun getProductDetail(@PathVariable("id") productId: Int): ResponseEntity<GetProductDetailResponse> {
         val result = getProductDetailService.getProductById(productId.toLong())
@@ -189,4 +197,8 @@ data class GetProductListResponseElement constructor(
 data class ChecklistStatistics constructor(
     val id: Int, // 1 ~ 7
     val num: Int // 선택한 사람의 수
+)
+
+data class GetProductListSizeResponse constructor(
+    val length: Long
 )
