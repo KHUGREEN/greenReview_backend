@@ -33,6 +33,8 @@ interface ProductRepository : JpaRepository<Product, Long>, ProductRepositoryCus
 }
 
 interface ProductRepositoryCustom {
+    fun findProductMaxSize(searchTerm: String): Long
+
     fun findProductWith(searchTerm : String, page: Pageable) : List<ProductListElement>
 }
 
@@ -41,6 +43,16 @@ interface ProductRepositoryCustom {
 @Component
 @PersistenceContext
 class ProductRepositoryCustomImpl : ProductRepositoryCustom, QuerydslRepositorySupport(Product::class.java) {
+    override fun findProductMaxSize(searchTerm: String): Long {
+        val qProduct = QProduct.product
+
+        val result = from(qProduct)
+            .where(qProduct.name.contains(searchTerm))
+            .fetchCount()
+
+        return result
+    }
+
     override fun findProductWith(searchTerm: String, page: Pageable) : List<ProductListElement> {
         val qProduct = QProduct.product
 

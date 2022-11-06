@@ -23,6 +23,7 @@ import com.khureen.greenReview.repository.dto.Product
 import com.khureen.greenReview.repository.dto.ProductListElement
 import com.khureen.greenReview.service.dto.ProductChecklistResponse
 import com.khureen.greenReview.service.dto.ProductListResponse
+import com.khureen.greenReview.service.dto.ProductMaxSizeResponse
 import com.khureen.greenReview.service.dto.ProductResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
@@ -153,6 +154,8 @@ class GetProductServiceImpl : GetProductService {
 
 interface GetProductListService {
     fun getProductList(searchTerm: String, page: Pageable): ProductListResponse
+
+    fun getProductMaxSize(searchTerm: String): ProductMaxSizeResponse
 }
 
 @Service
@@ -186,5 +189,11 @@ class GetProductListServiceImpl : GetProductListService {
         return ProductListResponse(summedList.map {
             it.first.toDTOWith(it.second)
         })
+    }
+
+    override fun getProductMaxSize(searchTerm: String): ProductMaxSizeResponse {
+        val size = productRepo.findProductMaxSize(searchTerm)
+
+        return ProductMaxSizeResponse(size)
     }
 }

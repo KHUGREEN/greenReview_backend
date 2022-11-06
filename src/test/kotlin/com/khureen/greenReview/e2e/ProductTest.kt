@@ -203,4 +203,34 @@ class ProductTest {
         )
     }
 
+
+    @Test
+    fun getProductSizeTest() {
+        // given
+
+        RestAssured.given().log().all()
+            .body(addProduct_params)
+            .contentType(ContentType.JSON)
+            .`when`()
+            .post("/product/add")
+
+        RestAssured.given().log().all()
+            .body(addProduct_params)
+            .contentType(ContentType.JSON)
+            .`when`()
+            .post("/product/add")
+
+        // when
+        val response = RestAssured.given().log().all()
+            .`when`()
+            .get("/product/size?q=name")
+            .then().log().all()
+            .extract()
+
+        // then
+        assertEquals(200, response.statusCode())
+        assertEquals(2, response.body().jsonPath().get("length"))
+
+    }
+
 }
