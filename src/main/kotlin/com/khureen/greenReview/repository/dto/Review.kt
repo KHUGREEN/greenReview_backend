@@ -44,7 +44,7 @@ class Review(
     @Embedded
     var checklist: Checklist,
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     var registeredDate: Date
 )
